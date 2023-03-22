@@ -6,3 +6,5 @@ Lab2/.idea/
 Lab2/task1/.idea/
 Lab2/task1/venv/
 Lab2/task1/__pycache__/
+
+__pycache__
