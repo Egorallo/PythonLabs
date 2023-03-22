@@ -2,7 +2,7 @@ from package import textStats
 
 
 def main():
-    text = "Tree fell alone... One thing is known, no one knows. Keep pushing!"
+    text = ""
     text2 = "Lol."
     sentences = textStats.split_into_sentences(text)
     print(textStats.split_into_sentences(text))
