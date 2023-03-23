@@ -3,7 +3,7 @@ from package import textStats
 
 def main():
     text = input("Enter text:")
-
+    # hidden comment
     sentences = textStats.split_into_sentences(text)
     words = textStats.get_actual_words(text)
     print(textStats.split_into_sentences(text))
