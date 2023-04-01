@@ -19,7 +19,6 @@ def get_count_sentences(sentences: list):
     """
     Counting sentences in a provided list of sentences
     """
-    print(sentences)
     return len(sentences)
 
 
