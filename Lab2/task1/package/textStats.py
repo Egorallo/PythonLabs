@@ -36,39 +36,47 @@ def avg_word_len(text: str):
     Gets average word length
     """
     number_of_letters = 0
-    words = get_actual_words(text)
+    sentences = split_into_sentences(text)
+    words = get_actual_words(sentences)
     for word in words:
         number_of_letters += len(word)
 
     return number_of_letters / len(words)
 
 
-def avg_sentence_len(text: str, sentences: list[str]):
+def avg_sentence_len(text: str):
     """
     Gets average sentence length
     """
     number_of_letters = 0
-    words = get_actual_words(text)
+    sentences = split_into_sentences(text)
+    words = get_actual_words(sentences)
     for word in words:
         number_of_letters += len(word)
 
     return number_of_letters / len(sentences)
 
 
-def get_actual_words(text: str):
+def get_actual_words(sentences: list[str]):
     """
     Splitting text into words
     """
-    return re.findall(r'\b(?![.,\d])\w*[a-zA-Z]\w*\b', text)
+    words = []
+    for sentence in sentences:
+        sentence = sentence.lower()
+        sentence = re.sub(r'[^\w\s]', '', sentence)
+        words += sentence.split()
+    return words
 
 
-def top_k_ngrams(words, k=10, n=4):
+def top_k_ngrams(text: str, k=10, n=4):
     """
     Returns the top-K repeated N-grams in a list of words.
     """
-    print(words)
+    sentences = split_into_sentences(text)
+    words = get_actual_words(sentences)
+
     ngrams = []
-    #for word in words:
     for i in range(len(words) - n + 1):
         ngrams.append(tuple(words[i:i + n]))
     top_ngrams = Counter(ngrams)
