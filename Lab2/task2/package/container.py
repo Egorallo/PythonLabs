@@ -34,7 +34,7 @@ class Container:
     def list(self):
         return list(self.data)
 
-    def grep(self, regex):
+    def grep(self, regex: str):
         try:
             re.compile(regex)
         except re.error:
