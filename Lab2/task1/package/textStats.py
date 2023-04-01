@@ -12,14 +12,14 @@ def split_into_sentences(text: str):
     return sentences
 
 
-def count_sentences(sentences: list):
+def get_count_sentences(sentences: list):
     """
     Counting sentences in a provided list of sentences
     """
     return len(sentences)
 
 
-def count_non_declarative(sentences: list[str]):
+def get_count_non_declarative(sentences: list[str]):
     """
     Counting amount of non-declarative sentences
     """
@@ -31,7 +31,7 @@ def count_non_declarative(sentences: list[str]):
     return count
 
 
-def avg_word_len(text: str):
+def get_avg_word_len(text: str):
     """
     Gets average word length
     """
@@ -44,7 +44,7 @@ def avg_word_len(text: str):
     return number_of_letters / len(words)
 
 
-def avg_sentence_len(text: str):
+def get_avg_sentence_len(text: str):
     """
     Gets average sentence length
     """
@@ -69,7 +69,7 @@ def get_actual_words(sentences: list[str]):
     return words
 
 
-def top_k_ngrams(text: str, k=10, n=4):
+def get_top_k_ngrams(text: str, k=10, n=4):
     """
     Returns the top-K repeated N-grams in a list of words.
     """
