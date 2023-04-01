@@ -6,6 +6,9 @@ def split_into_sentences(text: str):
     """
     Splitting text into sentences
     """
+    if text == "":
+        return []
+
     sentences = re.split('(?<!\w\.\w.)(?<![A-Z][a-z]\.)(?<=\.|\?|\!)\s', text)
     sentences = cleared_sentences(sentences)
 
@@ -16,6 +19,7 @@ def get_count_sentences(sentences: list):
     """
     Counting sentences in a provided list of sentences
     """
+    print(sentences)
     return len(sentences)
 
 
@@ -40,8 +44,10 @@ def get_avg_word_len(text: str):
     words = get_actual_words(sentences)
     for word in words:
         number_of_letters += len(word)
-
-    return number_of_letters / len(words)
+    try:
+        return number_of_letters / len(words)
+    except ZeroDivisionError:
+        return 0
 
 
 def get_avg_sentence_len(text: str):
@@ -54,7 +60,10 @@ def get_avg_sentence_len(text: str):
     for word in words:
         number_of_letters += len(word)
 
-    return number_of_letters / len(sentences)
+    try:
+        return number_of_letters / len(sentences)
+    except ZeroDivisionError:
+        return 0
 
 
 def get_actual_words(sentences: list[str]):
