@@ -1,4 +1,4 @@
-from container import Container
+from task2.package.container import Container
 
 
 class User:
@@ -34,7 +34,7 @@ class User:
         print(found) if found else print("Couldn't find such keys")
 
     def list_keys(self):
-        return print(self.container.list())
+        print(self.container.list())
 
     def grep_keys(self, regex: str):
         print(self.container.grep(regex))
