@@ -1,5 +1,5 @@
 import sys
-
+from task2.constants.messages import TERMINAL_GREETING
 from task2.package.user import User
 from task2.package.validator import Validator
 
@@ -11,7 +11,7 @@ class Terminal:
         self.__prompt = None
 
     def start_terminal(self):
-        print("$$$Terminal started$$$")
+        print(TERMINAL_GREETING)
 
         self.__user = User(Validator.validate_username())
 
@@ -19,7 +19,7 @@ class Terminal:
             try:
                 self.__prompt = input(f"{self.__user.username} >> ")
                 command = Validator.validate_command(self.__prompt)
-                
+
                 match command:
                     case "add":
                         self.add_command()

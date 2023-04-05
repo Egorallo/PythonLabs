@@ -8,3 +8,8 @@ TERMINAL_COMMANDS = {
     "load": "load container from the file",
     "switch": "switch to another user"
 }
+
+TERMINAL_GREETING = "$$$Terminal started$$$\n\nHelper:\n"
+
+for command, description in TERMINAL_COMMANDS.items():
+    TERMINAL_GREETING += f"{command}: {description}\n"
