@@ -43,7 +43,11 @@ class Terminal:
                 sys.exit()
 
     def add_command(self):
-        print("added")
+        args = Validator.validate_args(self.__prompt)
+        if len(args)!=0:
+            self.__user.add_keys(args)
+        else:
+            print("Arguments weren't provided")
 
     def remove_command(self):
         pass
