@@ -1,9 +1,11 @@
 import os
 import re
+import pickle
 
 
 class Container:
-    """ get path here"""
+
+    SAVE_PATH = os.path.relpath('data/')
 
     def __init__(self):
         self.__data = set()
@@ -47,11 +49,13 @@ class Container:
 
         return matched_keys
 
-    def save(self):
-        pass
+    def save(self, username: str):
+        filename = os.path.join(self.SAVE_PATH, f"{username}.pkl")
+
+        with open(filename, 'wb+') as f:
+            pickle.dump(self.data, f)
+
 
     def load(self):
         pass
 
-    def switch(self):
-        pass

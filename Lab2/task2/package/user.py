@@ -40,7 +40,7 @@ class User:
         print(self.container.grep(regex))
 
     def save(self):
-        pass
+        self.container.save(self.username)
 
     def load(self):
         pass
