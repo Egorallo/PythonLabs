@@ -1,5 +1,8 @@
+import sys
+
 from task2.package.user import User
 from task2.package.validator import Validator
+
 
 class Terminal:
 
@@ -13,30 +16,33 @@ class Terminal:
         self.__user = User(input("Enter username: "))
 
         while True:
-            self.__prompt = input(f"{self.__user.username} >> ")
-            command = Validator.validate_command(self.__prompt)
-            match command:
-                case "add":
-                    self.add_command()
-                case "remove":
-                    print("removed")
-                case "find":
-                    print("found")
-                case "list":
-                    print("listed")
-                case "grep":
-                    print("grepped")
-                case "save":
-                    print("saved")
-                case "load":
-                    print("loaded")
-                case "switch":
-                    print("switched")
-                case _:
-                    print(command)
+            try:
+                self.__prompt = input(f"{self.__user.username} >> ")
+                command = Validator.validate_command(self.__prompt)
+                match command:
+                    case "add":
+                        self.add_command()
+                    case "remove":
+                        print("removed")
+                    case "find":
+                        print("found")
+                    case "list":
+                        print("listed")
+                    case "grep":
+                        print("grepped")
+                    case "save":
+                        print("saved")
+                    case "load":
+                        print("loaded")
+                    case "switch":
+                        print("switched")
+                    case _:
+                        print(command)
+            except KeyboardInterrupt:
+                sys.exit()
 
     def add_command(self):
-        pass
+        print("added")
 
     def remove_command(self):
         pass
@@ -58,4 +64,3 @@ class Terminal:
 
     def switch_command(self):
         pass
-
