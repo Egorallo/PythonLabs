@@ -1,9 +1,10 @@
 from task2.package.user import User
+from task2.package.validator import Validator
 
 class Terminal:
 
     def __init__(self):
-        self.__user = None
+        self.__user: User | None = None
         self.__prompt = None
 
     def start_terminal(self):
@@ -13,10 +14,10 @@ class Terminal:
 
         while True:
             self.__prompt = input(f"{self.__user.username} >> ")
-            command = self.__prompt
+            command = Validator.validate_command(self.__prompt)
             match command:
                 case "add":
-                    print("added")
+                    self.add_command()
                 case "remove":
                     print("removed")
                 case "find":
@@ -33,4 +34,28 @@ class Terminal:
                     print("switched")
                 case _:
                     print(command)
+
+    def add_command(self):
+        pass
+
+    def remove_command(self):
+        pass
+
+    def find_command(self):
+        pass
+
+    def list_command(self):
+        pass
+
+    def grep_command(self):
+        pass
+
+    def save_command(self):
+        pass
+
+    def load_command(self):
+        pass
+
+    def switch_command(self):
+        pass
 
