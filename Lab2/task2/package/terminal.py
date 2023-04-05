@@ -24,17 +24,17 @@ class Terminal:
                     case "add":
                         self.add_command()
                     case "remove":
-                        print("removed")
+                        self.remove_command()
                     case "find":
-                        print("found")
+                        self.find_command()
                     case "list":
-                        print("listed")
+                        self.list_command()
                     case "grep":
-                        print("grepped")
+                        self.grep_command()
                     case "save":
-                        print("saved")
+                        self.save_command()
                     case "load":
-                        print("loaded")
+                        self.load_command()
                     case "switch":
                         print("switched")
                     case _:
@@ -44,28 +44,45 @@ class Terminal:
 
     def add_command(self):
         args = Validator.validate_args(self.__prompt)
-        if len(args)!=0:
+        if len(args) != 0:
             self.__user.add_keys(args)
         else:
             print("Arguments weren't provided")
 
     def remove_command(self):
-        pass
+        args = Validator.validate_args(self.__prompt)
+
+        if len(args) == 1:
+            self.__user.remove_key(args[0])
+        elif len(args) == 0:
+            print("Nothing to remove")
+        else:
+            print("One argument should be provided")
 
     def find_command(self):
-        pass
+        args = Validator.validate_args(self.__prompt)
+
+        if len(args) != 0:
+            self.__user.find_keys(args)
+        else:
+            print("Nothing found")
 
     def list_command(self):
-        pass
+        self.__user.list_keys()
 
     def grep_command(self):
-        pass
+        args = Validator.validate_args(self.__prompt, True)
+
+        if len(args) != 0:
+            self.__user.grep_keys(''.join(args))
+        else:
+            print("No matches found.")
 
     def save_command(self):
-        pass
+        self.__user.save()
 
     def load_command(self):
-        pass
+        self.__user.load()
 
     def switch_command(self):
         pass

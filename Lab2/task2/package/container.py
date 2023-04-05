@@ -50,12 +50,26 @@ class Container:
         return matched_keys
 
     def save(self, username: str):
-        filename = os.path.join(self.SAVE_PATH, f"{username}.pkl")
+        path = os.path.join(self.SAVE_PATH, f"{username}.pkl")
 
-        with open(filename, 'wb+') as f:
+        with open(path, 'wb+') as f:
             pickle.dump(self.data, f)
 
+    def load(self, username: str, switch=False):
+        path = os.path.join(self.SAVE_PATH, f"{username}.pkl")
 
-    def load(self):
-        pass
+        if not os.path.lexists(path):
+            if switch:
+                self.data = set()
+            return
 
+        with open(path, 'rb') as f:
+            try:
+                new_data: set = pickle.load(f)
+            except pickle.UnpicklingError:
+                new_data = set()
+
+        if switch:
+            self.data = new_data
+        else:
+            self.data.update(new_data)
