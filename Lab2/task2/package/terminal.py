@@ -13,12 +13,13 @@ class Terminal:
     def start_terminal(self):
         print("$$$Terminal started$$$")
 
-        self.__user = User(input("Enter username: "))
+        self.__user = User(Validator.validate_username())
 
         while True:
             try:
                 self.__prompt = input(f"{self.__user.username} >> ")
                 command = Validator.validate_command(self.__prompt)
+                
                 match command:
                     case "add":
                         self.add_command()
