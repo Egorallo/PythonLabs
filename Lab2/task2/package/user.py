@@ -1,4 +1,6 @@
 from task2.package.container import Container
+from task2.package.validator import Validator
+from task2.constants.messages import LOAD_PROMPT
 
 
 class User:
@@ -45,5 +47,13 @@ class User:
     def load(self):
         self.container.load(self.username)
 
-    def switch(self):
-        pass
+    def switch(self, new_user: str):
+        choice: str = Validator.get_choice(LOAD_PROMPT.format(new_user))
+
+        print(f"\nSwitch to user {new_user}")
+        if choice == 'y':
+            self.container.load(new_user, switch=True)
+        elif choice == 'n':
+            self.container.data = set()
+
+        self.username = new_user

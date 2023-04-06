@@ -9,7 +9,10 @@ TERMINAL_COMMANDS = {
     "switch": "switch to another user"
 }
 
+LOAD_PROMPT = "Load {}'s data? [y][n]:"
+SAVE_PROMPT = "Save {}'s data before switching? [y][n]: "
 TERMINAL_GREETING = "$$$Terminal started$$$\n\nHelper:\n"
+
 
 for command, description in TERMINAL_COMMANDS.items():
     TERMINAL_GREETING += f"{command}: {description}\n"

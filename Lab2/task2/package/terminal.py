@@ -1,5 +1,7 @@
 import sys
-from task2.constants.messages import TERMINAL_GREETING
+from task2.constants.messages import (TERMINAL_GREETING,
+                                      SAVE_PROMPT)
+
 from task2.package.user import User
 from task2.package.validator import Validator
 
@@ -10,10 +12,11 @@ class Terminal:
         self.__user: User | None = None
         self.__prompt = None
 
-    def start_terminal(self):
         print(TERMINAL_GREETING)
 
-        self.__user = User(Validator.validate_username())
+    def start_terminal(self):
+
+        self.__user = User(Validator.get_username())
 
         while True:
             try:
@@ -36,7 +39,7 @@ class Terminal:
                     case "load":
                         self.load_command()
                     case "switch":
-                        print("switched")
+                        self.switch_command()
                     case _:
                         print(command)
             except KeyboardInterrupt:
@@ -85,4 +88,15 @@ class Terminal:
         self.__user.load()
 
     def switch_command(self):
-        pass
+        args = Validator.validate_args(self.__prompt)
+        username = ''.join(args)
+
+        if len(args) == 1 and Validator.validate_username(username):
+            choice = Validator.get_choice(SAVE_PROMPT.format(self.__user.username))
+
+            if choice == 'y':
+                self.__user.save()
+
+            self.__user.switch(username)
+        else:
+            print("Incorrect username")

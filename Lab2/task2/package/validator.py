@@ -17,7 +17,7 @@ class Validator:
             return f"{possible_command}: command not found"
 
     @classmethod
-    def validate_username(cls):
+    def get_username(cls):
         while True:
             username = input("Enter your username: ")
             pattern = re.compile(r'^[a-zA-Z0-9]{3,}$')
@@ -27,6 +27,16 @@ class Validator:
             else:
                 print("Username must be at least 3 characters"
                       " long and contain only numbers and/or latin letters")
+
+    @classmethod
+    def validate_username(cls, username: str):
+        username = username.strip()
+
+        match = re.match(r'^[a-zA-Z0-9]{3,}$', username)
+        if match is not None and username == match.group(0):
+            return True
+        else:
+            return False
 
     @classmethod
     def validate_args(cls, input_line: str, grep: bool = False):
@@ -52,3 +62,10 @@ class Validator:
         args[:] = (value for value in args if value != "")
 
         return tuple(args)
+
+    @classmethod
+    def get_choice(cls, prompt):
+        while True:
+            choice = input(prompt)
+            if choice == 'n' or choice == 'y':
+                return choice
