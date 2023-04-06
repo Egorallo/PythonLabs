@@ -2,8 +2,15 @@ from package import textStats
 
 
 def main():
+
     text = input("Enter text:")
-    k, n = map(int, input("Enter K & N:").split())
+    while True:
+        try:
+            k, n = map(int, input("Enter K & N:").split())
+            break
+        except ValueError:
+            pass
+
     sentences = textStats.split_into_sentences(text)
 
     print("num of sentences: ", textStats.get_count_sentences(sentences))
