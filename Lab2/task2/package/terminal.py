@@ -1,6 +1,7 @@
 import sys
 from task2.constants.messages import (TERMINAL_GREETING,
-                                      SAVE_PROMPT)
+                                      SAVE_PROMPT,
+                                      EXIT_PROMPT)
 
 from task2.package.user import User
 from task2.package.validator import Validator
@@ -40,10 +41,12 @@ class Terminal:
                         self.load_command()
                     case "switch":
                         self.switch_command()
+                    case "exit":
+                        self.exit_command()
                     case _:
                         print(command)
             except KeyboardInterrupt:
-                sys.exit()
+                self.exit_command()
 
     def add_command(self):
         args = Validator.validate_args(self.__prompt)
@@ -100,3 +103,9 @@ class Terminal:
             self.__user.switch(username)
         else:
             print("Incorrect username")
+
+    def exit_command(self):
+        if Validator.get_choice(EXIT_PROMPT.format(self.__user.username)) == 'y':
+            self.save_command()
+        sys.exit()
+
