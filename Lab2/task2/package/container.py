@@ -4,7 +4,6 @@ import pickle
 
 
 class Container:
-
     SAVE_PATH = os.path.relpath('data/')
 
     def __init__(self):

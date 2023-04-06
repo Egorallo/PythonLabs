@@ -108,4 +108,3 @@ class Terminal:
         if Validator.get_choice(EXIT_PROMPT.format(self.__user.username)) == 'y':
             self.save_command()
         sys.exit()
-
