@@ -1,16 +1,14 @@
-# This is a sample Python script.
+from package.basicjsonserializer import JSONSerializer
 
-# Press Shift+F10 to execute it or replace it with your code.
-# Press Double Shift to search everywhere for classes, files, tool windows, actions, and settings.
+def main():
+    someStr = "await"
+    someNum = 4.12
+    someBool = False
+    ser = JSONSerializer()
+    dumped = ser.dumps(someBool)
+    print(dumped)
 
-
-def print_hi(name):
-    # Use a breakpoint in the code line below to debug your script.
-    print(f'Hi, {name}')  # Press Ctrl+F8 to toggle the breakpoint.
-
-
-# Press the green button in the gutter to run the script.
 if __name__ == '__main__':
-    print_hi('PyCharm')
+    main()
 
 # See PyCharm help at https://www.jetbrains.com/help/pycharm/
