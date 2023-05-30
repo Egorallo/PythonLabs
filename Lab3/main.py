@@ -1,11 +1,13 @@
 from package.basicjsonserializer import JSONSerializer
 
 def main():
-    someStr = "await"
-    someNum = 4.12
-    someBool = False
+    class A:
+        def check(self):
+            return "wowzers"
+
+    a = A()
     ser = JSONSerializer()
-    dumped = ser.dumps(someBool)
+    dumped = ser.dumps(a)
     print(dumped)
 
 if __name__ == '__main__':
