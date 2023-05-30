@@ -1,6 +1,8 @@
-from constants.formats import JSON
+from constants.formats import JSON, JSON_TYPE
 from constants.constants import BOOL_TYPES, PRIMITIVES, TYPE_MAPPING
-from funcs.funcs import get_key, to_number, get_items
+from funcs.funcs import get_key, to_number, get_items, type_from_str, create_object
+import re
+from typing import Iterator
 
 
 class JSONSerializer:
@@ -33,9 +35,10 @@ class JSONSerializer:
             return get_key(load_from, BOOL_TYPES)
         if to_number(load_from) is not None:
             return to_number(load_from)
-
-
-
+        return create_object(
+            type_from_str(load_from, JSON_TYPE),
+            self.__load_from_json(load_from)
+        )
 
 
     def __load_to_json(self, obj: dict):
@@ -53,3 +56,30 @@ class JSONSerializer:
                 json_format += f"\t{line}\n"
 
         return json_format
+
+    def __load_from_json(self, template: str) -> dict:
+        obj: dict = {}
+        lines: list[str] = template.split("\n")
+        it: Iterator[str] = enumerate(lines)
+
+        for i, line in it:
+            if not re.search(r'\s*(.+):\s*([^,]*)', line):
+                continue
+
+            key, value = re.search(r'\s*(.+):\s*([^,]*)', line).groups()
+
+            if value != "{":
+                obj[self.loads(key)] = self.loads(value)
+
+            elif value == "{" and "<class" not in key:
+                brackets = 1
+                start = i + 1
+
+                while brackets and i < len(lines) - 1:
+                    i, line = next(it, None)
+                    brackets += ("{" in lines[i]) - ("}" in lines[i])
+
+                obj[self.loads(key)] = self.loads('\n'.join(lines[start:i]))
+
+        return obj
+

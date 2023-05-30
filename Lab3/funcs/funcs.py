@@ -1,11 +1,13 @@
 from types import FunctionType, MethodType, CodeType, ModuleType, \
     BuiltinMethodType, BuiltinFunctionType, CellType, GeneratorType
 from typing import Any, Collection, Iterable
+import re
+from constants.constants import IGNORED_FIELDS, IGNORED_FIELD_TYPES, TYPE_MAPPING
 
-from constants.constants import IGNORED_FIELDS, IGNORED_FIELD_TYPES
 
 def get_key(value, obj: dict) -> int:
     return [key for key in obj if obj[key] == value][0]
+
 
 def to_number(s: str) -> int | float | complex | None:
     for num_type in (int, float, complex):
@@ -13,6 +15,7 @@ def to_number(s: str) -> int | float | complex | None:
             return num_type(s)
         except (ValueError, TypeError):
             pass
+
 
 def get_items(obj) -> dict[str, Any]:
     if isinstance(obj, (BuiltinFunctionType, BuiltinMethodType)):
@@ -54,7 +57,7 @@ def get_items(obj) -> dict[str, Any]:
         a = []
         for i in obj:
             a.append(i)
-        return{
+        return {
             "values": a
         }
 
@@ -138,3 +141,89 @@ def get_items(obj) -> dict[str, Any]:
                 )
             }
         }
+
+
+def type_from_str(s: str, pattern: str) -> type:
+    if not re.search(pattern, s):
+        return type(None)
+
+    return TYPE_MAPPING[re.search(pattern, s).group(1)]
+
+
+def create_object(obj_type: type, obj_data):
+    if issubclass(obj_type, dict):
+        return obj_data
+
+    elif issubclass(obj_type, GeneratorType):
+        it = iter(obj_data.get("values"))
+
+        def generator_func():
+            yield from it
+
+        return generator_func()
+
+    elif issubclass(obj_type, Iterable):
+        return obj_type(obj_data.values())
+
+    elif issubclass(obj_type, CodeType):
+        return CodeType(*list(obj_data.values()))
+
+    elif issubclass(obj_type, FunctionType):
+        if obj_data.get('closure'):
+            closure = tuple([CellType(x) for x in obj_data.get('closure')])
+        elif obj_data.get('closure') and '__class__' in obj_data.get('freevars'):
+            closure = tuple([CellType(...) for _ in obj_data.get('closure')])
+        else:
+            closure = tuple()
+
+        obj = FunctionType(
+            code=CodeType(*list(obj_data.values())[:16]),
+            globals=obj_data.get('globals'),
+            name=obj_data['name'],
+            closure=closure
+        )
+        obj.__qualname__ = obj_data.get('qualname')
+        obj.__globals__[obj.__name__] = obj
+
+        return obj
+
+    elif issubclass(obj_type, property):
+        return property(fget=obj_data.get("getter"),
+                        fdel=obj_data.get("deleter"),
+                        fset=obj_data.get("setter"))
+
+
+
+    elif issubclass(obj_type, MethodType):
+        return MethodType(
+            obj_data.get('__func__'),
+            obj_data.get('__self__'),
+        )
+
+    elif issubclass(obj_type, (staticmethod, classmethod)):
+        return create_object(FunctionType, obj_data)
+
+    elif issubclass(obj_type, type):
+        obj = type(obj_data.get('name'), obj_data.get('mro'), obj_data.get('attrs'))
+
+        try:
+            obj.__init__.__closure__[0].cell_contents = obj
+        except (AttributeError, IndexError):
+            ...
+
+        return obj
+
+    elif issubclass(obj_type, ModuleType):
+        return __import__(obj_data.get('name'))
+
+    # if obj_data[TYPE] == ITERATOR_TYPE:
+    #     return iter(create_object(obj_type, item) for item in obj_data[VALUE])
+
+    # elif issubclass(obj_type, type(iter)):
+    #     return iter(create_object(obj_type, item) for item in obj_data[VALUE])
+
+    else:
+        obj = object.__new__(obj_data.get('class'))
+        obj.__dict__ = obj_data.get('attrs')
+        return obj
+

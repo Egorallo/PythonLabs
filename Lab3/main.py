@@ -8,7 +8,8 @@ def main():
     a = A()
     ser = JSONSerializer()
     dumped = ser.dumps(a)
-    print(dumped)
+    loaded = ser.loads(dumped)
+    print(loaded.check())
 
 if __name__ == '__main__':
     main()
