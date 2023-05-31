@@ -83,3 +83,9 @@ class JSONSerializer:
 
         return obj
 
+    def dump(self, obj, file_to):
+        file_to.write(self.dumps(obj))
+
+    def load(self, file_from):
+        return self.loads(file_from.read())
+
