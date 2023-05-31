@@ -59,6 +59,10 @@ def main():
     #
     # print(func(2, 3, a=5))
 
+    ser = JSONSerializer()
+    a = None
+    print(ser.dumps(a))
+
     parser = argparse.ArgumentParser()
     parser.add_argument("read_from")
     parser.add_argument("write_to")
