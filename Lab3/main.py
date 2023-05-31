@@ -1,15 +1,15 @@
 from package.basicjsonserializer import JSONSerializer
-
+from package.basicxmlserializer import XMLSerializer
 def main():
     class A:
         def check(self):
             return "wowzers"
 
     a = A()
-    ser = JSONSerializer()
+    ser = XMLSerializer()
     dumped = ser.dumps(a)
     loaded = ser.loads(dumped)
-    print(loaded.check())
+    print(dumped)
 
 if __name__ == '__main__':
     main()
