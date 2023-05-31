@@ -1,6 +1,7 @@
 from package.basicjsonserializer import JSONSerializer
 from package.basicxmlserializer import XMLSerializer
 import math
+import argparse
 
 
 def main():
@@ -32,32 +33,54 @@ def main():
     # loaded = ser.loads(dumped)
     # # print(dumped)
     # if < param and func -> int, return result+3
-    def decorator(param):
-        def upper(func):
-            def wrapper(*args, **kwargs):
-                return func(args[0]) + 3 if (len(args) + len(kwargs) < param and type(func(args[0])) == int) else func(
-                    args[0])
+    # def decorator(param):
+    #     def upper(func):
+    #         def wrapper(*args, **kwargs):
+    #             return func(args[0]) + 3 if (len(args) + len(kwargs) < param and type(func(args[0])) == int) else func(
+    #                 args[0])
+    #
+    #         return wrapper
+    #
+    #     return upper
+    #
+    # def decorator2(func):
+    #     def wrapper(*args, **kwargs):
+    #         return func()
+    #
+    #     return wrapper
+    #
+    # @decorator2
+    # def somefunc():
+    #     pass
+    #
+    # @decorator(3)
+    # def func(*args, **kwargs):
+    #     return args[0]
+    #
+    # print(func(2, 3, a=5))
 
-            return wrapper
+    parser = argparse.ArgumentParser()
+    parser.add_argument("read_from")
+    parser.add_argument("write_to")
+    parser.add_argument("format_from")
+    parser.add_argument("format_to")
 
-        return upper
+    args = parser.parse_args()
 
-    def decorator2(func):
-        def wrapper(*args, **kwargs):
-            return func()
+    read_from, write_to, format_from, format_to = args.read_from, args.write_to, \
+        args.format_from, args.format_to
 
-        return wrapper
+    with open(read_from, 'r') as file, \
+            open(write_to, 'w+') as file_to:
 
-    @decorator2
-    def somefunc():
-        pass
+        format_from: JSONSerializer | XMLSerializer = JSONSerializer() if format_from == "json" else XMLSerializer()
+        format_to: JSONSerializer | XMLSerializer = JSONSerializer() if format_to == "json" else XMLSerializer()
 
-    @decorator(3)
-    def func(*args, **kwargs):
-        return args[0]
+        format_to.dump(format_from.load(file), file_to)
 
-    print(func(2, 3, a=5))
-
+    # ser = JSONSerializer()
+    # a = {10: "why", 20: "when", 30: "where"}
+    # print(ser.dumps(a))
 
 if __name__ == '__main__':
     main()
