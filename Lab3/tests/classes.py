@@ -3,65 +3,69 @@ import unittest
 from package.basicjsonserializer import JSONSerializer
 
 
-class TestClass1:
-    SOME_PROP_1 = {
-        'a': None,
-        'b': True,
-        'c': False
-    }
+class Dumpling:
+    dumplings = 24
 
-    def __init__(self, aa):
-        self.a = 4
-        self.aa = aa
-
-    def test_bound_1(self):
-        return self.a + self.aa
-
-    @staticmethod
-    def test_static_1(a):
-        return a * 3
-
-
-class TestClass2(TestClass1):
-    SOME_PROP_2 = 'ahuha2 aboba@ amuga'
-
-    def __init__(self, bb):
-        super().__init__(bb * 2)
-        self.b = 5
-        self.bb = bb - 0.8
+    def __init__(self, brand):
+        self.brand = brand
 
     @classmethod
-    def test_class_2(cls):
-        return cls.SOME_PROP_1
+    def get_dumplings(cls):
+        return cls.dumplings
+
+    @staticmethod
+    def sheeesh():
+        return "eat raw beef"
+
+    def simple_method(self):
+        print("wowzers")
+
+    def __len__(self):
+        return self.dumplings
 
 
-class WithoutInheritanceCase(unittest.TestCase):
-    json_ser = JSONSerializer()
+class DumplingEater(Dumpling):
+    noteaten = 122
 
-    def test_no_inheritance(self):
+    def __init__(self, name):
+        self.name = "SNAKEATER"
+
+    @classmethod
+    def total_dumplings(cls):
+        return cls.noteaten
+
+
+class Test(unittest.TestCase):
+    json = JSONSerializer()
+
+    def test_1(self):
         self.assertEqual(
-            self.json_ser.loads(self.json_ser.dumps(TestClass1))(12).test_bound_1(),
-            TestClass1(12).test_bound_1()
+            self.json.loads(self.json.dumps(Dumpling("Dobry"))).brand,
+            Dumpling("Dobry").brand
         )
         self.assertEqual(
-            self.json_ser.loads(self.json_ser.dumps(TestClass1)).test_static_1(2),
-            TestClass1.test_static_1(2)
+            self.json.loads(self.json.dumps(Dumpling)).sheeesh(),
+            Dumpling.sheeesh()
         )
 
-    def test_single_class_inheritance(self):
+    def test_2(self):
         self.assertEqual(
-            self.json_ser.loads(self.json_ser.dumps(TestClass2)).SOME_PROP_1,
-            TestClass2.SOME_PROP_1
+            self.json.loads(self.json.dumps(Dumpling("slave"))).__len__(),
+            Dumpling("slave").__len__()
         )
         self.assertEqual(
-            self.json_ser.loads(self.json_ser.dumps(TestClass2))(12).test_bound_1(),
-            TestClass2(12).test_bound_1()
+            self.json.loads(self.json.dumps(Dumpling("slave"))).simple_method(),
+            Dumpling("slave").simple_method()
         )
         self.assertEqual(
-            self.json_ser.loads(
-                self.json_ser.dumps(TestClass2)
-            ).test_class_2(self.json_ser.loads(self.json_ser.dumps(TestClass2))),
-            TestClass2.test_class_2()
+            self.json.loads(self.json.dumps(Dumpling("slave"))).get_dumplings(),
+            Dumpling("slave").get_dumplings()
+        )
+
+    def test_3(self):
+        self.assertEqual(
+            self.json.loads(self.json.dumps(DumplingEater("slave"))).total_dumplings(),
+            DumplingEater("slava").total_dumplings()
         )
 
 
