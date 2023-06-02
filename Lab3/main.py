@@ -112,8 +112,7 @@ def main():
 
             return True
 
-    # with open("fileto.txt",'r') as f:
-    #
+
     manager = Manager([1,2,3])
     with manager as man:
         print(man)
