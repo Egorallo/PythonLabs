@@ -23,20 +23,26 @@ class Service(models.Model):
     name = models.CharField(max_length=100, help_text="Enter the service to perform")
 
     def __str__(self):
-        return self.namemake
+        return self.name
 
 
 class ServicePack(models.Model):
     """Model for Service Pack."""
     naming = models.CharField(max_length=200, help_text="Enter the service pack naming")
     service = models.ManyToManyField(Service, help_text='Select a service for this service pack')
-    order = models.ManyToManyField(Order, blank=True)
+
 
     def __str__(self):
         return self.naming
 
     def get_absolute_url(self):
         return reverse('servicepack-detail', args=[str(self.id)])
+
+    def display_service(self):
+        """Create a string for the Genre. This is required to display genre in Admin."""
+        return ', '.join(service.name for service in self.service.all()[:3])
+
+    display_service.short_description = 'Service'
 
 
 class ServicePackInstance(models.Model):
@@ -45,6 +51,8 @@ class ServicePackInstance(models.Model):
     service_pack = models.ForeignKey('ServicePack', on_delete=models.RESTRICT, null=True)
     price = models.IntegerField(default=0)
     date_created = models.DateField(null=True, blank=True)
+    order = models.ManyToManyField(Order, blank=True)
+    #order = models.ForeignKey(Order, on_delete=models.SET_NULL, null=True)
 
     AVAILABLE_STATUS = (
         ('a', 'Available'),
