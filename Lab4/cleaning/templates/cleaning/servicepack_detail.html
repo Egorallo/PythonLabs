@@ -1,0 +1,27 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+    <h1>Naming: {{ servicepack.naming }}</h1>
+
+    <p><strong>Order:</strong> <a href="">{{ servicepack.order }}</a></p>
+    <!-- author detail link not yet defined -->
+    <p><strong>Provided services:</strong> {{ servicepack.service.all|join:", " }}</p>
+
+    <div style="margin-left:20px;margin-top:20px">
+        <h4>Copies</h4>
+
+        {% for copy in servicepack.servicepackinstance_set.all %}
+            <hr/>
+            <p
+                    class="{% if copy.status == 'a' %}text-success{% elif copy.status == 'o' %}text-danger{% else %}text-warning{% endif %}">
+                {{ copy.get_status_display }}
+            </p>
+            {% if copy.status != 'a' %}
+                <p><strong>Not available now</strong></p>
+            {% endif %}
+            <p><strong>Price:</strong> {{ copy.price }}</p>
+            <p><strong>Date:</strong> {{ copy.date_created }}</p>
+            <p class="text-muted"><strong>Id:</strong> {{ copy.id }}</p>
+        {% endfor %}
+    </div>
+{% endblock %}

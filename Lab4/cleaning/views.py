@@ -1,7 +1,23 @@
-from django.shortcuts import render
+from django.contrib.auth import login
+from django.contrib.auth.forms import UserCreationForm
+from django.shortcuts import render, redirect
 from .models import ServicePack, Order, ServicePackInstance, Service
+from django.views import generic
+
+
 # Create your views here.
 
+
+def register(request):
+    if request.method == 'POST':
+        form = UserCreationForm(request.POST)
+        if form.is_valid():
+            user = form.save()
+            login(request, user)
+            return redirect('index')  # Redirect to the desired page after registration
+    else:
+        form = UserCreationForm()
+    return render(request, 'registration/register.html', {'form': form})
 
 def index(request):
     """View function for home page of site."""
@@ -19,3 +35,12 @@ def index(request):
     }
 
     return render(request, 'index.html', context=context)
+
+
+class ServicePackListView(generic.ListView):
+    model = ServicePack
+    paginate_by = 2
+
+
+class ServicePackDetailView(generic.DetailView):
+    model = ServicePack

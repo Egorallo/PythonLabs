@@ -1,0 +1,17 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+  <h1>Service Pack List</h1>
+  {% if servicepack_list %}
+    <ul>
+      {% for servicepack in servicepack_list %}
+      <li>
+        <a href="{{ servicepack.get_absolute_url }}">{{ servicepack.naming }}</a>
+        ({{servicepack.order}})
+      </li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <p>There are no service packs.</p>
+  {% endif %}
+{% endblock %}
