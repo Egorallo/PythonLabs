@@ -30,8 +30,9 @@ class ServicePack(models.Model):
     """Model for Service Pack."""
     naming = models.CharField(max_length=200, help_text="Enter the service pack naming")
     service = models.ManyToManyField(Service, help_text='Select a service for this service pack')
-    order = models.ManyToManyField(Order, blank=True)
-    price = models.IntegerField(default=10)
+    #order = models.ManyToManyField(Order, blank=True)
+    price = models.DecimalField(max_digits=10, decimal_places=2)
+    purchase_count = models.PositiveIntegerField(default=0)
 
     def __str__(self):
         return self.naming

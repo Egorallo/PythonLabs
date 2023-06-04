@@ -24,11 +24,11 @@ from cleaning.views import register
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('admin/', admin.site.urls),
     path('cleaning/', include('cleaning.urls')),
     path('', RedirectView.as_view(url='cleaning/')),
     path('accounts/', include('django.contrib.auth.urls')),
     path('accounts/register/', register, name='register'),
     path('cart/', include('cart.urls', namespace='cart')),
+    path('order/', include('order.urls', namespace='order')),
 
     ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

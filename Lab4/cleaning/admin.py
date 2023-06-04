@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Order, Service, ServicePack, ServicePackInstance
+from .models import  Service, ServicePack, ServicePackInstance
 
 
 class ServicePackInstanceInline(admin.TabularInline):
@@ -7,9 +7,9 @@ class ServicePackInstanceInline(admin.TabularInline):
     extra = 0
 
 
-class ServicePackInline(admin.TabularInline):
-    model = ServicePack
-    extra = 0
+# class ServicePackInline(admin.TabularInline):
+#     model = ServicePack
+#     extra = 0
 
 
 @admin.register(ServicePack)
@@ -33,14 +33,14 @@ class ServicePackInstanceAdmin(admin.ModelAdmin):
     )
 
 
-class OrderAdmin(admin.ModelAdmin):
-    list_display = ('code', 'address', 'date_of_completion')
-    fields = ['code', ('address', 'date_of_completion')]
-    #inlines = [ServicePackInstanceInline]
+# class OrderAdmin(admin.ModelAdmin):
+#     list_display = ('code', 'address', 'date_of_completion')
+#     fields = ['code', ('address', 'date_of_completion')]
+#     #inlines = [ServicePackInstanceInline]
 
 
 # Register your models here.
 admin.site.register(Service)
 # admin.site.register(ServicePack)
 # admin.site.register(ServicePackInstance)
-admin.site.register(Order, OrderAdmin)
+# admin.site.register(Order, OrderAdmin)

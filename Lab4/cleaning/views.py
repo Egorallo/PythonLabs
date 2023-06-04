@@ -1,7 +1,7 @@
 from django.contrib.auth import login
 from django.contrib.auth.forms import UserCreationForm
 from django.shortcuts import render, redirect
-from .models import ServicePack, Order, ServicePackInstance, Service
+from .models import ServicePack, ServicePackInstance, Service
 from django.views import generic
 
 
@@ -25,13 +25,13 @@ def index(request):
     num_service_packs = ServicePack.objects.all().count()
     num_instances = ServicePackInstance.objects.all().count()
     num_instances_available = ServicePackInstance.objects.filter(status__exact='a').count()
-    num_orders = Order.objects.count()
+    #num_orders = Order.objects.count()
 
     context = {
         'num_service_packs': num_service_packs,
         'num_instances': num_instances,
         'num_instances_available': num_instances_available,
-        'num_orders': num_orders,
+        #'num_orders': num_orders,
     }
 
     return render(request, 'index.html', context=context)
