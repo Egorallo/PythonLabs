@@ -4,20 +4,7 @@ import uuid
 
 
 # Create your models here.
-class Order(models.Model):
-    """Model for orders."""
-    code = models.CharField(max_length=100)
-    address = models.CharField(max_length=200)
-    date_of_completion = models.DateField(null=True, blank=True)
 
-    class Meta:
-        ordering = ['code']
-
-    def get_absolute_url(self):
-        return reverse('order-detail', args=[str(self.id)])
-
-    def __str__(self):
-        return f'{self.code}, {self.date_of_completion}'
 class Service(models.Model):
     """Model for Service itself."""
     name = models.CharField(max_length=100, help_text="Enter the service to perform")
@@ -44,6 +31,7 @@ class ServicePack(models.Model):
         return ', '.join(service.name for service in self.service.all()[:3])
 
     display_service.short_description = 'Service'
+
 
 
 class ServicePackInstance(models.Model):

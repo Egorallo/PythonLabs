@@ -1,3 +1,4 @@
+import requests
 from django.contrib.auth import login
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import Group
@@ -44,17 +45,42 @@ def register(request):
 
 def index(request):
     """View function for home page of site."""
+    if request.method == 'POST':
+        name = request.POST.get('name')  # Get the name from the POST data
+        if name:
+            # Make a GET request to the Agify.io API
+            response = requests.get(f'https://api.agify.io/?name={name}')
+            if response.status_code == 200:
+                data = response.json()
+                age = data.get('age')
+            else:
+                age = "Failed to retrieve age."
+        else:
+            age = None
+    else:
+        name = None
+        age = None
 
     num_service_packs = ServicePack.objects.all().count()
     num_instances = ServicePackInstance.objects.all().count()
     num_instances_available = ServicePackInstance.objects.filter(status__exact='a').count()
-    #num_orders = Order.objects.count()
+
+    # Make a GET request to the Kanye Rest API
+    response = requests.get('https://api.kanye.rest/')
+
+    if response.status_code == 200:
+        data = response.json()
+        quote = data["quote"]
+    else:
+        quote = "Failed to retrieve quote."
 
     context = {
         'num_service_packs': num_service_packs,
         'num_instances': num_instances,
         'num_instances_available': num_instances_available,
-        #'num_orders': num_orders,
+        'quote': quote,
+        'age': age,
+        'name': name,
     }
 
     return render(request, 'index.html', context=context)
@@ -62,7 +88,22 @@ def index(request):
 
 class ServicePackListView(generic.ListView):
     model = ServicePack
-    paginate_by = 2
+    template_name = 'cleaning/servicepack_list.html'  # Update with your template path
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        price_filter = self.request.GET.get('price')
+
+        if price_filter:
+            queryset = queryset.filter(price__lt=price_filter)
+
+        return queryset
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['price_filter'] = self.request.GET.get('price')
+        return context
+
 
 
 class ServicePackDetailView(generic.DetailView):
