@@ -23,6 +23,7 @@ def order_create(request):
                                      quantity=item['quantity'])
             item['servicepack'].purchase_count += item['quantity']
             item['servicepack'].save()
+
         cart.clear()
         return render(request, 'order/created.html',
                       {'order': order})

@@ -46,9 +46,8 @@ def register(request):
 def index(request):
     """View function for home page of site."""
     if request.method == 'POST':
-        name = request.POST.get('name')  # Get the name from the POST data
+        name = request.POST.get('name')
         if name:
-            # Make a GET request to the Agify.io API
             response = requests.get(f'https://api.agify.io/?name={name}')
             if response.status_code == 200:
                 data = response.json()
@@ -65,7 +64,7 @@ def index(request):
     num_instances = ServicePackInstance.objects.all().count()
     num_instances_available = ServicePackInstance.objects.filter(status__exact='a').count()
 
-    # Make a GET request to the Kanye Rest API
+
     response = requests.get('https://api.kanye.rest/')
 
     if response.status_code == 200:
