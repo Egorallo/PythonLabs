@@ -7,7 +7,7 @@
       {% for servicepack in servicepack_list %}
       <li>
         <a href="{{ servicepack.get_absolute_url }}">{{ servicepack.naming }}</a>
-        ({{servicepack.order}})
+        $({{servicepack.price}})
       </li>
       {% endfor %}
     </ul>
