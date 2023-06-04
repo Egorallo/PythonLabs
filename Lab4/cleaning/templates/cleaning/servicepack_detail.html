@@ -22,6 +22,13 @@
             <p><strong>Price:</strong> {{ copy.price }}</p>
             <p><strong>Date:</strong> {{ copy.date_created }}</p>
             <p class="text-muted"><strong>Id:</strong> {{ copy.id }}</p>
+            {% if user.is_authenticated %}
+                <form action="{% url 'cart:cart_add' servicepack.id %}" method="post">
+                    {{ cart_servicepack_form }}
+                    {% csrf_token %}
+                    <input type="submit" value="Add to cart">
+                </form>
+            {% endif %}
         {% endfor %}
     </div>
 {% endblock %}
