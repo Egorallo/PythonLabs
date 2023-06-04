@@ -1,6 +1,10 @@
-from django.db.models import Sum
+import io
+from django.contrib.auth.decorators import login_required
+from django.db.models import Sum, Count
+from django.http import HttpResponse
 from django.shortcuts import render
-from django.views import generic
+from django.views import generic, View
+import matplotlib.pyplot as plt
 
 from cleaning.models import ServicePack
 from .models import OrderItem
@@ -11,6 +15,7 @@ from django.core.exceptions import PermissionDenied
 
 
 def order_create(request):
+
     if not request.user.is_authenticated:
         raise PermissionDenied("net dostpa")
 
@@ -95,3 +100,4 @@ class OrderListView(generic.ListView):
 
 class OrderDetailView(generic.DetailView):
     model = Order
+
