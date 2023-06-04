@@ -46,6 +46,7 @@
                         {% if group.name == 'Admin' %}
                             <li><a href="{% url 'servicepacks' %}">All service packs</a></li>
                             <li><a href="{% url 'order:orders' %}">All orders</a></li>
+                            <li><a href="{% url 'administration:list_servicepack' %}">Edit stuff</a></li>
                         {% endif %}
                     {% endfor %}
 

@@ -24,6 +24,7 @@ from cleaning.views import register
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('administration/', include('administration.urls', namespace='administration')),
     path('cleaning/', include('cleaning.urls')),
     path('', RedirectView.as_view(url='cleaning/')),
     path('accounts/', include('django.contrib.auth.urls')),
