@@ -23,11 +23,10 @@
         <div class="col-sm-2">
             {% block sidebar %}
                 <ul class="sidebar-nav">
+                    <li>Timezone: <strong style="font-weight: bold;" id="user-timezone"></strong></li>
+                    <li>Date: <strong style="font-weight: bold;" id="current-date"></strong></li>
+                    <li>Current Time: <strong style="font-weight: bold;" id="current-time"></strong></li>
                     <li><a href="{% url 'index' %}">Home</a></li>
-
-                    {#                    {% if not user.is_authenticated %}#}
-                    {#                        <li><a href="{% url 'servicepacks' %}">All service packs</a></li>#}
-                    {#                    {% endif %}#}
 
                     {% for group in user.groups.all %}
                         {% if group.name == 'Customer' %}
@@ -50,16 +49,15 @@
                         {% endif %}
                     {% endfor %}
 
-
                     {% if user.is_authenticated %}
                         <li>User: <strong style="font-weight: bold;">{{ user.get_username }}</strong></li>
                         <li><a href="{% url 'logout' %}?next={{ '' }}">Logout</a></li>
+
                     {% else %}
                         <li><a href="{% url 'servicepacks' %}">All service packs</a></li>
                         <li><a href="{% url 'register' %}?next={{ '' }}">Register</a></li>
                         <li><a href="{% url 'login' %}?next={{ '/cleaning' }}">Login</a></li>
                     {% endif %}
-
 
                 </ul>
             {% endblock %}
@@ -68,5 +66,43 @@
         </div>
     </div>
 </div>
+
+<!-- Add JavaScript code to update the current time and date every second -->
+<script>
+    function updateTime() {
+        var currentTime = new Date();
+        var hours = currentTime.getHours();
+        var minutes = currentTime.getMinutes();
+        var seconds = currentTime.getSeconds();
+        var month = currentTime.getMonth() + 1;  // Months are zero-based
+        var day = currentTime.getDate();
+        var year = currentTime.getFullYear();
+
+        // Add leading zeros to hours, minutes, and seconds if they are less than 10
+        hours = (hours < 10 ? "0" : "") + hours;
+        minutes = (minutes < 10 ? "0" : "") + minutes;
+        seconds = (seconds < 10 ? "0" : "") + seconds;
+
+        // Update the current time element in the HTML
+        document.getElementById("current-time").textContent = hours + ":" + minutes + ":" + seconds;
+        document.getElementById("current-date").textContent = day + "/" + month + "/" + year;
+
+        // Schedule the next update in 1 second
+        setTimeout(updateTime, 1000);
+    }
+
+    // Get the user's timezone using pytz library and update the HTML element
+    fetch('https://worldtimeapi.org/api/ip')
+        .then(response => response.json())
+        .then(data => {
+            var userTimezone = data.timezone;
+            document.getElementById("user-timezone").textContent = userTimezone;
+        })
+        .catch(error => console.log(error));
+
+    // Call the updateTime function to start updating the current time and date
+    updateTime();
+</script>
+
 </body>
 </html>
