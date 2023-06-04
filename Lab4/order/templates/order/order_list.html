@@ -9,6 +9,8 @@
         <strong>Mean:</strong> ${{ sales_mean }}
         <strong>Mode:</strong> ${{ sales_mode }}
         <strong>Median:</strong> ${{ sales_median }}
+        <strong>Most popular pack:</strong> {{ popular_item }}
+        <strong>Most profitable pack:</strong> {{ item_with_most_profit }}
     </p>
 
     <h2>Client List:</h2>
@@ -48,7 +50,8 @@
                         {% for item in order.items.all %}
                             <li>
                                 <a href="{{ item.servicepack.get_absolute_url }}">{{ item.servicepack.naming }}</a>
-                                <a>{{ item.quantity }}x</a>
+                                <a>{{ item.quantity }} x </a>
+                                <a>${{ item.price }}</a>
                             </li>
                         {% empty %}
                             <li>No service packs selected.</li>

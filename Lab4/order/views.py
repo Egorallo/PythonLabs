@@ -35,6 +35,10 @@ def order_create(request):
 
 from statistics import mean, mode, median
 
+from collections import Counter
+
+from collections import Counter
+
 class OrderListView(generic.ListView):
     model = Order
     template_name = 'order/order_list.html'
@@ -46,18 +50,33 @@ class OrderListView(generic.ListView):
         client_list = Order.objects.order_by('client').values_list('client', flat=True).distinct()
         product_list = ServicePack.objects.order_by('naming')
 
-        # Calculate the total sales amount and iterate through each order to get total cost
+        # Calculate the total sales amount and iterate through each order to get total cost and profit
         total_sales = 0
         sales_list = []
+        item_list = []
         order_list = self.get_queryset()
         for order in order_list:
             total_sales += order.get_total_cost()
             sales_list.append(order.get_total_cost())
+            item_list.extend([item.servicepack for item in order.items.all()])
 
         # Calculate statistical measures
         sales_mean = mean(sales_list) if sales_list else 0
-        sales_mode = mode(sales_list) if sales_list else 0
+        sales_mode = max(Counter(sales_list), key=Counter(sales_list).get) if sales_list else None
         sales_median = median(sales_list) if sales_list else 0
+        popular_item = max(Counter(item_list), key=Counter(item_list).get) if item_list else None
+
+        # Calculate the item with the most profit
+        item_profit_dict = {}
+        for order in order_list:
+            for item in order.items.all():
+                profit = (item.price - item.servicepack.price) * item.quantity
+                if item.servicepack not in item_profit_dict:
+                    item_profit_dict[item.servicepack] = profit
+                else:
+                    item_profit_dict[item.servicepack] += profit
+
+        item_with_most_profit = max(item_profit_dict, key=item_profit_dict.get) if item_profit_dict else None
 
         context['client_list'] = client_list
         context['product_list'] = product_list
@@ -65,8 +84,12 @@ class OrderListView(generic.ListView):
         context['sales_mean'] = sales_mean
         context['sales_mode'] = sales_mode
         context['sales_median'] = sales_median
+        context['popular_item'] = popular_item
+        context['item_with_most_profit'] = item_with_most_profit
 
         return context
+
+
 
 
 

@@ -1,20 +1,27 @@
+from django.contrib.auth.decorators import user_passes_test
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views import View
+from django.contrib.auth.decorators import user_passes_test
+from django.contrib.auth.mixins import UserPassesTestMixin
 
 from administration.forms import ServicePackForm
 from cleaning.models import ServicePack
 
 
 # Create your views here.
+@user_passes_test(lambda user: user.groups.filter(name='Admin').exists())
 def index(request):
     servicepacks = ServicePack.objects.all()
     return render(request, "administration/list_servicepack.html", {"servicepacks": servicepacks})
 
-
-class ServicePackCreate(View):
+#
+class ServicePackCreate(UserPassesTestMixin,View):
     def get(self, request):
         form = ServicePackForm()
         return render(request, 'administration/create_servicepack.html', {'form': form})
+
+    def test_func(self):
+        return self.request.user.groups.filter(name='Admin').exists()
 
     def post(self, request):
         form = ServicePackForm(request.POST)
