@@ -33,6 +33,8 @@ def order_create(request):
                   {'cart': cart})
 
 
+from statistics import mean, mode, median
+
 class OrderListView(generic.ListView):
     model = Order
     template_name = 'order/order_list.html'
@@ -46,15 +48,26 @@ class OrderListView(generic.ListView):
 
         # Calculate the total sales amount and iterate through each order to get total cost
         total_sales = 0
+        sales_list = []
         order_list = self.get_queryset()
         for order in order_list:
             total_sales += order.get_total_cost()
+            sales_list.append(order.get_total_cost())
+
+        # Calculate statistical measures
+        sales_mean = mean(sales_list) if sales_list else 0
+        sales_mode = mode(sales_list) if sales_list else 0
+        sales_median = median(sales_list) if sales_list else 0
 
         context['client_list'] = client_list
         context['product_list'] = product_list
         context['total_sales'] = total_sales
+        context['sales_mean'] = sales_mean
+        context['sales_mode'] = sales_mode
+        context['sales_median'] = sales_median
 
         return context
+
 
 
 class OrderDetailView(generic.DetailView):
