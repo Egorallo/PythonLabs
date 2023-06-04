@@ -2,6 +2,39 @@
 
 {% block content %}
     <h1>Order List</h1>
+
+    <h2>Statistics:</h2>
+    <p>
+        <strong>Total Sales:</strong> ${{ total_sales }}
+    </p>
+
+    <h2>Client List:</h2>
+    {% if client_list %}
+        <ul>
+            {% for client in client_list %}
+                <li>{{ client }}</li>
+            {% empty %}
+                <li>No clients found.</li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>There are no clients.</p>
+    {% endif %}
+
+    <h2>Product List:</h2>
+    {% if product_list %}
+        <ul>
+            {% for product in product_list %}
+                <li>{{ product.naming }}</li>
+            {% empty %}
+                <li>No products found.</li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>There are no products.</p>
+    {% endif %}
+
+    <h2>Order Details:</h2>
     {% if order_list %}
         <ul>
             {% for order in order_list %}
@@ -11,15 +44,12 @@
                     <ul>
                         {% for item in order.items.all %}
                             <li>
-
                                 <a href="{{ item.servicepack.get_absolute_url }}">{{ item.servicepack.naming }}</a>
                                 <a>{{ item.quantity }}x</a>
-
                             </li>
                         {% empty %}
                             <li>No service packs selected.</li>
                         {% endfor %}
-
                     </ul>
                     <a style="font-weight: bold">Total: ${{ order.get_total_cost }} </a>
                 </li>
