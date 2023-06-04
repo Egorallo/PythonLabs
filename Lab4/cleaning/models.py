@@ -41,7 +41,6 @@ class ServicePack(models.Model):
         return reverse('servicepack-detail', args=[str(self.id)])
 
     def display_service(self):
-        """Create a string for the Genre. This is required to display genre in Admin."""
         return ', '.join(service.name for service in self.service.all()[:3])
 
     display_service.short_description = 'Service'

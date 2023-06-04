@@ -25,8 +25,9 @@
                 <ul class="sidebar-nav">
                     <li><a href="{% url 'index' %}">Home</a></li>
                     <li><a href="{% url 'servicepacks' %}">All service packs</a></li>
-                    <li><a href="">All orders</a></li>
+
                     {% if user.is_authenticated %}
+                        <li><a href="{% url 'order:orders' %}">All orders</a></li>
                         <li><a href="{% url 'cart:cart_detail' %}">Cart</a></li>
                         <li>User: <strong style="font-weight: bold;">{{ user.get_username }}</strong></li>
                         <li><a href="{% url 'logout' %}?next={{ '' }}">Logout</a></li>

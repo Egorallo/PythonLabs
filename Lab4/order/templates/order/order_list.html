@@ -1,0 +1,33 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+    <h1>Order List</h1>
+    {% if order_list %}
+        <ul>
+            {% for order in order_list %}
+                <li>
+                    <a href="{% url 'order:order-detail' order.id %}">Order: {{ order.id }}</a> - Client: {{ order.client }}
+
+                    <ul>
+                        {% for item in order.items.all %}
+                            <li>
+
+                                <a href="{{ item.servicepack.get_absolute_url }}">{{ item.servicepack.naming }}</a>
+                                <a>{{ item.quantity }}x</a>
+
+                            </li>
+                        {% empty %}
+                            <li>No service packs selected.</li>
+                        {% endfor %}
+
+                    </ul>
+                    <a style="font-weight: bold">Total: ${{ order.get_total_cost }} </a>
+                </li>
+            {% empty %}
+                <li>No orders found.</li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>There are no orders.</p>
+    {% endif %}
+{% endblock %}

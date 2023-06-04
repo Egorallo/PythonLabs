@@ -1,13 +1,14 @@
 from django.shortcuts import render
+from django.views import generic
+
 from .models import OrderItem
 from cart.cart import Cart
-#from cleaning.models import Client
+# from cleaning.models import Client
 from .models import Order
 from django.core.exceptions import PermissionDenied
 
 
 def order_create(request):
-
     if not request.user.is_authenticated:
         raise PermissionDenied("net dostpa")
 
@@ -28,3 +29,11 @@ def order_create(request):
 
     return render(request, 'order/create.html',
                   {'cart': cart})
+
+
+class OrderListView(generic.ListView):
+    model = Order
+
+
+class OrderDetailView(generic.DetailView):
+    model = Order
