@@ -13,4 +13,5 @@ urlpatterns = [
     path('create/', administration.views.ServicePackCreate.as_view(), name='create_servicepack'),
     path('delete/<int:id>/', administration.views.ServicePackDelete.as_view(), name='delete_servicepack'),
     path('edit/<int:id>/', administration.views.ServicePackEdit.as_view(), name='edit_servicepack'),
+    path('createinstance/', administration.views.ServicePackInstanceCreateView.as_view(), name='create_servicepackinstance'),
 ]

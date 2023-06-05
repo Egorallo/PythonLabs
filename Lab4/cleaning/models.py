@@ -18,7 +18,7 @@ class ServicePack(models.Model):
     naming = models.CharField(max_length=200, help_text="Enter the service pack naming")
     service = models.ManyToManyField(Service, help_text='Select a service for this service pack')
     #order = models.ManyToManyField(Order, blank=True)
-    price = models.DecimalField(max_digits=10, decimal_places=2)
+    #price = models.DecimalField(max_digits=10, decimal_places=2)
     purchase_count = models.PositiveIntegerField(default=0)
 
     def __str__(self):
@@ -62,7 +62,7 @@ class ServicePackInstance(models.Model):
         ordering = ['price']
 
     def __str__(self):
-        return f'{self.id} ({self.service_pack.naming})'
+        return f'{self.id} '
 
     def get_absolute_url(self):
         return reverse('servicepack-detail', args=[str(self.id)])

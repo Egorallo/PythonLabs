@@ -30,7 +30,7 @@
     {% if product_list %}
         <ul>
             {% for product in product_list %}
-                <li>{{ product.naming }}</li>
+                <li>{{ product.naming }}. Purchase amount: {{ product.purchase_count }} times</li>
             {% empty %}
                 <li>No products found.</li>
             {% endfor %}

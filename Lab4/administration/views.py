@@ -4,7 +4,7 @@ from django.views import View
 from django.contrib.auth.decorators import user_passes_test
 from django.contrib.auth.mixins import UserPassesTestMixin
 
-from administration.forms import ServicePackForm
+from administration.forms import ServicePackForm, ServicePackInstanceForm
 from cleaning.models import ServicePack
 
 
@@ -13,6 +13,21 @@ from cleaning.models import ServicePack
 def index(request):
     servicepacks = ServicePack.objects.all()
     return render(request, "administration/list_servicepack.html", {"servicepacks": servicepacks})
+
+class ServicePackInstanceCreateView(View):
+    form_class = ServicePackInstanceForm
+    template_name = 'your_template_name.html'  # Replace with your template name
+
+    def get(self, request):
+        form = self.form_class
+        return render(request, 'administration/create_servicepackinstance.html', {'form': form})
+
+    def post(self, request):
+        form = ServicePackInstanceForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('administration:list_servicepack')  # Replace with your desired redirect URL
+        return render(request, 'administration/create_servicepackinstance.html', {'form': form})
 
 #
 class ServicePackCreate(UserPassesTestMixin,View):
@@ -61,3 +76,5 @@ class ServicePackDelete(View):
         servicepack = get_object_or_404(ServicePack, id=id)
         servicepack.delete()
         return redirect('administration:list_servicepack')
+
+
