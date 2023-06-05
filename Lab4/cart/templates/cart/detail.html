@@ -49,7 +49,7 @@
         {% for item in cart %}
             {% with servicepackinstance=item.servicepackinstance %}
                 <tr>
-                    <td><a >{{ servicepackinstance.service_pack.naming}}</a></td>
+                    <td><a>{{ servicepackinstance.service_pack.naming }}</a></td>
                     <td>{{ item.quantity }}</td>
                     <td><a href="{% url 'cart:cart_remove' servicepackinstance.id %}">Remove</a></td>
                     <td class="num">${{ item.price }}</td>
@@ -64,13 +64,9 @@
         </tr>
         </tbody>
     </table>
-    <div class="checkout" style="margin-top: 10px;
-            text-align: left;">
-        {#        <p class="text-right">#}
-        {#        <a href="{% url 'shop:book_list' %}" class="button light">Continue shopping</a>#}
-                <a href="{% url 'order:order_create' %}" class="button">
-        Checkout
-                </a>
-        {#        </p>#}
+    <div class="checkout" style="margin-top: 10px; text-align: left;">
+        <a href="{% url 'order:order_create' %}" class="button">
+            Checkout
+        </a>
     </div>
 {% endblock %}

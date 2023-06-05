@@ -4,7 +4,7 @@ from django.views import View
 from django.contrib.auth.decorators import user_passes_test
 from django.contrib.auth.mixins import UserPassesTestMixin
 
-from administration.forms import ServicePackForm, ServicePackInstanceForm
+from administration.forms import ServicePackForm
 from cleaning.models import ServicePack
 
 
@@ -14,23 +14,8 @@ def index(request):
     servicepacks = ServicePack.objects.all()
     return render(request, "administration/list_servicepack.html", {"servicepacks": servicepacks})
 
-class ServicePackInstanceCreateView(View):
-    form_class = ServicePackInstanceForm
-    template_name = 'your_template_name.html'  # Replace with your template name
 
-    def get(self, request):
-        form = self.form_class
-        return render(request, 'administration/create_servicepackinstance.html', {'form': form})
-
-    def post(self, request):
-        form = ServicePackInstanceForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return redirect('administration:list_servicepack')  # Replace with your desired redirect URL
-        return render(request, 'administration/create_servicepackinstance.html', {'form': form})
-
-#
-class ServicePackCreate(UserPassesTestMixin,View):
+class ServicePackCreate(UserPassesTestMixin, View):
     def get(self, request):
         form = ServicePackForm()
         return render(request, 'administration/create_servicepack.html', {'form': form})
@@ -46,12 +31,6 @@ class ServicePackCreate(UserPassesTestMixin,View):
         return render(request, 'administration/create_servicepack.html', {'form': form})
 
 
-# class ProductDetail(View):
-#     def get(self, request, id):
-#         product = get_object_or_404(Product, id=id)
-#         return render(request, 'administrator/product_detail.html', {'product': product})
-
-
 class ServicePackEdit(View):
     def get(self, request, id):
         servicepack = get_object_or_404(ServicePack, id=id)
@@ -64,7 +43,7 @@ class ServicePackEdit(View):
         if form.is_valid():
             form.save()
             return redirect('administration:list_servicepack')
-        return render(request,'administration/edit_servicepack.html', {'servicepack': servicepack, 'form': form})
+        return render(request, 'administration/edit_servicepack.html', {'servicepack': servicepack, 'form': form})
 
 
 class ServicePackDelete(View):
@@ -76,5 +55,3 @@ class ServicePackDelete(View):
         servicepack = get_object_or_404(ServicePack, id=id)
         servicepack.delete()
         return redirect('administration:list_servicepack')
-
-

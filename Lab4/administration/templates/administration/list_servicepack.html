@@ -5,7 +5,6 @@
     {% if servicepacks %}
         <ul>
             <form action="{% url 'administration:create_servicepack' %}" method="post">
-                {#            {{ cart_product_form }}#}
                 {% csrf_token %}
                 <input type="submit" value="Create">
             </form>

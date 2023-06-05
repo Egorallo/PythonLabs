@@ -16,7 +16,7 @@ class Cart(object):
         servicepackinstance_id = str(servicepackinstance.id)
         if servicepackinstance_id not in self.cart:
             self.cart[servicepackinstance_id] = {'quantity': 0,
-                                  'price': str(servicepackinstance.price)}
+                                                 'price': str(servicepackinstance.price)}
         if update_quantity:
             self.cart[servicepackinstance_id]['quantity'] = quantity
         else:

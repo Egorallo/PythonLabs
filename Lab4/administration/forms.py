@@ -1,5 +1,4 @@
 from django import forms
-from django.contrib.admin.widgets import AdminDateWidget
 
 from cleaning.models import Service, ServicePack, ServicePackInstance
 
@@ -25,7 +24,6 @@ class ServicePackInstanceForm(forms.ModelForm):
         return servicepackinstance
 
 
-
 class ServicePackForm(forms.ModelForm):
     class Meta:
         model = ServicePack
@@ -33,7 +31,7 @@ class ServicePackForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        if self.instance.pk:
+        if self.instance.pk:  # Edit existing object
             self.fields['service'].initial = self.instance.service.all()
 
     def save(self, commit=True):
@@ -46,4 +44,3 @@ class ServicePackForm(forms.ModelForm):
             servicepack.service.clear()
         self.save_m2m()
         return servicepack
-

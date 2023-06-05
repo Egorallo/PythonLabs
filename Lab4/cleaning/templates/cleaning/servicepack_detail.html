@@ -3,8 +3,6 @@
 {% block content %}
     <h1>Naming: {{ servicepack.naming }}</h1>
 
-    {#    <p><strong>Order:</strong> <a href="">{{ servicepack.order }}</a></p>#}
-    <!-- author detail link not yet defined -->
     <p><strong>Provided services:</strong> {{ servicepack.service.all|join:", " }}</p>
 
     <form method="GET">
@@ -18,19 +16,6 @@
 
     <div style="margin-left:20px;margin-top:20px">
         <h4>Available Packs</h4>
-        {#         {% if user.is_authenticated %}#}
-        {#                {% for group in user.groups.all %}#}
-        {#                    {% if group.name == 'Admin' %}#}
-        {#                        <form action="{% url 'administration:create_servicepackinstance' %}" method="post">#}
-        {#            {{ cart_product_form }}#}
-        {#                            {% csrf_token %}#}
-        {#                            <input type="submit" value="Create">#}
-        {#                        </form>#}
-        {#                        <a href="{% url 'servicepackinstance_update' copy.id %}">Edit</a>#}
-        {#                        <a href="{% url 'servicepackinstance_delete' copy.id %}">Delete</a>#}
-        {#                    {% endif %}#}
-        {#                {% endfor %}#}
-        {#            {% endif %}#}
 
         {% for copy in filtered_copies %}
             <hr/>
@@ -43,20 +28,6 @@
             <p><strong>Price:</strong> ${{ copy.price }}</p>
             <p><strong>Date can be booked on:</strong> {{ copy.date_created }}</p>
             <p class="text-muted"><strong>Id:</strong> {{ copy.id }}</p>
-
-            {#            {% if user.is_authenticated %}#}
-            {#                {% for group in user.groups.all %}#}
-            {#                    {% if group.name == 'Admin' %}#}
-            {#                        <form action="{% url 'administration:create_servicepackinstance' %}" method="post">#}
-            {#            {{ cart_product_form }}#}
-            {#                            {% csrf_token %}#}
-            {#                            <input type="submit" value="Create">#}
-            {#                        </form>#}
-            {#                        <a href="{% url 'servicepackinstance_update' copy.id %}">Edit</a>#}
-            {#                        <a href="{% url 'servicepackinstance_delete' copy.id %}">Delete</a>#}
-            {#                    {% endif %}#}
-            {#                {% endfor %}#}
-            {#            {% endif %}#}
 
             {% if user.is_authenticated and copy.status == 'a' %}
                 {% for group in user.groups.all %}
