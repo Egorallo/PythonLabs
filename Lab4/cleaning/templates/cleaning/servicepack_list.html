@@ -3,22 +3,12 @@
 {% block content %}
   <h1>Service Pack List</h1>
 
-  <form method="GET">
-
-           <label for="price-filter">Filter:</label>
-      <label>
-          <input type="number" name="price" value="{{ price_filter }}" placeholder="Enter price filter">
-      </label>
-
-      <button type="submit">Apply</button>
-  </form>
-
   {% if servicepack_list %}
     <ul>
       {% for servicepack in servicepack_list %}
         <li>
           <a href="{{ servicepack.get_absolute_url }}">{{ servicepack.naming }}</a>
-          $({{ servicepack.price }})
+
         </li>
       {% endfor %}
     </ul>

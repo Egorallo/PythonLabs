@@ -4,7 +4,7 @@ from .models import Order, OrderItem
 # Register your models here.
 class OrderItemInline(admin.TabularInline):
     model = OrderItem
-    raw_id_fields = ['servicepack']
+    raw_id_fields = ['servicepackinstance']
 
 
 class OrderAdmin(admin.ModelAdmin):

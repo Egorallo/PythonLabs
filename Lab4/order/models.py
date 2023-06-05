@@ -1,7 +1,7 @@
 from django.db import models
 from django.urls import reverse
 
-from cleaning.models import ServicePack
+from cleaning.models import ServicePack, ServicePackInstance
 # Create your models here.
 
 class Order(models.Model):
@@ -27,7 +27,7 @@ class Order(models.Model):
 
 class OrderItem(models.Model):
     order = models.ForeignKey(Order, related_name='items', on_delete=models.CASCADE)
-    servicepack = models.ForeignKey(ServicePack, related_name='order_items', on_delete=models.CASCADE)
+    servicepackinstance = models.ForeignKey(ServicePackInstance, related_name='order_items', on_delete=models.CASCADE, null=True)
     price = models.DecimalField(max_digits=10, decimal_places=2)
     quantity = models.PositiveIntegerField(default=1)
 

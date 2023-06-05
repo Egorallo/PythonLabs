@@ -2,7 +2,7 @@ import requests
 from django.contrib.auth import login
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import Group
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 
 from .forms import ExtendedUserCreationForm
 from .models import ServicePack, ServicePackInstance, Service
@@ -64,14 +64,16 @@ def index(request):
     num_instances = ServicePackInstance.objects.all().count()
     num_instances_available = ServicePackInstance.objects.filter(status__exact='a').count()
 
+    try:
+        response = requests.get('https://api.kanye.rest/')
 
-    response = requests.get('https://api.kanye.rest/')
-
-    if response.status_code == 200:
-        data = response.json()
-        quote = data["quote"]
-    else:
-        quote = "Failed to retrieve quote."
+        if response.status_code == 200:
+            data = response.json()
+            quote = data["quote"]
+        else:
+            quote = "Failed to retrieve quote."
+    except:
+        quote = ""
 
     context = {
         'num_service_packs': num_service_packs,
@@ -89,21 +91,36 @@ class ServicePackListView(generic.ListView):
     model = ServicePack
     template_name = 'cleaning/servicepack_list.html'  # Update with your template path
 
-    def get_queryset(self):
-        queryset = super().get_queryset()
-        price_filter = self.request.GET.get('price')
-
-        if price_filter:
-            queryset = queryset.filter(price__lt=price_filter)
-
-        return queryset
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['price_filter'] = self.request.GET.get('price')
-        return context
+    # def get_queryset(self):
+    #     queryset = super().get_queryset()
+    #     price_filter = self.request.GET.get('price')
+    #
+    #     if price_filter:
+    #         queryset = queryset.filter(price__lt=price_filter)
+    #
+    #     return queryset
+    #
+    # def get_context_data(self, **kwargs):
+    #     context = super().get_context_data(**kwargs)
+    #     context['price_filter'] = self.request.GET.get('price')
+    #     return context
 
 
 
 class ServicePackDetailView(generic.DetailView):
     model = ServicePack
+    template_name = 'cleaning/servicepack_detail.html'  # Update with your template path
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        servicepack = self.get_object()
+        price_filter = self.request.GET.get('price')
+
+        if price_filter:
+            filtered_copies = servicepack.servicepackinstance_set.filter(price__lt=price_filter)
+        else:
+            filtered_copies = servicepack.servicepackinstance_set.all()
+
+        context['filtered_copies'] = filtered_copies
+        context['price_filter'] = price_filter
+        return context

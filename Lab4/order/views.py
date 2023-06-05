@@ -2,7 +2,7 @@ import io
 from django.contrib.auth.decorators import login_required
 from django.db.models import Sum, Count
 from django.http import HttpResponse
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.views import generic, View
 import matplotlib.pyplot as plt
 
@@ -13,36 +13,43 @@ from cart.cart import Cart
 from .models import Order
 from django.core.exceptions import PermissionDenied
 
+from django.shortcuts import get_object_or_404
+
 
 def order_create(request):
-
     if not request.user.is_authenticated:
-        raise PermissionDenied("net dostpa")
+        raise PermissionDenied("No access")
 
     cart = Cart(request)
+
+    if cart.get_total_price() == 0:
+        return redirect('http://127.0.0.1:8000/cleaning/')
+
     if request.method == 'POST':
         order = Order.objects.create(client=request.user.username)
-
         for item in cart:
-            OrderItem.objects.create(order=order,
-                                     servicepack=item['servicepack'],
-                                     price=item['price'],
-                                     quantity=item['quantity'])
-            item['servicepack'].purchase_count += item['quantity']
-            item['servicepack'].save()
-        cart.clear()
-        return render(request, 'order/created.html',
-                      {'order': order})
+            servicepackinstance = item['servicepackinstance']
+            OrderItem.objects.create(
+                order=order,
+                servicepackinstance=servicepackinstance,
+                price=item['price'],
+                quantity=item['quantity']
+            )
+            servicepackinstance.purchase_count += item['quantity']
+            servicepackinstance.status = 'o'  # Mark the service pack instance as ordered
+            servicepackinstance.save()
 
-    return render(request, 'order/create.html',
-                  {'cart': cart})
+        cart.clear()
+
+        return render(request, 'order/created.html', {'order': order})
+
+    return render(request, 'order/create.html', {'cart': cart})
 
 
 from statistics import mean, mode, median
 
 from collections import Counter
 
-from collections import Counter
 
 class OrderListView(generic.ListView):
     model = Order
@@ -63,25 +70,30 @@ class OrderListView(generic.ListView):
         for order in order_list:
             total_sales += order.get_total_cost()
             sales_list.append(order.get_total_cost())
-            item_list.extend([item.servicepack for item in order.items.all()])
+            item_list.extend([item.servicepackinstance for item in order.items.all() if item.servicepackinstance])
 
         # Calculate statistical measures
-        sales_mean = mean(sales_list) if sales_list else 0
-        sales_mode = max(Counter(sales_list), key=Counter(sales_list).get) if sales_list else None
+        sales_mean = round(mean(sales_list), 2) if sales_list else 0
+        sales_mode = mode(sales_list) if sales_list else 0
         sales_median = median(sales_list) if sales_list else 0
-        popular_item = max(Counter(item_list), key=Counter(item_list).get) if item_list else None
+
+        # Calculate the most popular item
+        item_count = Counter(item_list)
+        popular_item = item_count.most_common(1)[0][0].service_pack.naming if item_count else None
 
         # Calculate the item with the most profit
         item_profit_dict = {}
         for order in order_list:
             for item in order.items.all():
-                profit = (item.price - item.servicepack.price) * item.quantity
-                if item.servicepack not in item_profit_dict:
-                    item_profit_dict[item.servicepack] = profit
-                else:
-                    item_profit_dict[item.servicepack] += profit
+                if item.servicepackinstance:
+                    profit = (item.price - item.servicepackinstance.price) * item.quantity
+                    if item.servicepackinstance not in item_profit_dict:
+                        item_profit_dict[item.servicepackinstance] = profit
+                    else:
+                        item_profit_dict[item.servicepackinstance] += profit
 
-        item_with_most_profit = max(item_profit_dict, key=item_profit_dict.get) if item_profit_dict else None
+        item_with_most_profit = max(item_profit_dict, key=lambda item: item_profit_dict[
+            item]).service_pack.naming if item_profit_dict else None
 
         context['client_list'] = client_list
         context['product_list'] = product_list
@@ -95,9 +107,5 @@ class OrderListView(generic.ListView):
         return context
 
 
-
-
-
 class OrderDetailView(generic.DetailView):
     model = Order
-

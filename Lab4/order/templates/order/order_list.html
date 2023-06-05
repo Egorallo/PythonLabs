@@ -49,7 +49,7 @@
                     <ul>
                         {% for item in order.items.all %}
                             <li>
-                                <a href="{{ item.servicepack.get_absolute_url }}">{{ item.servicepack.naming }}</a>
+                                <a href="{{ item.servicepack.get_absolute_url }}">{{ item.servicepackinstance.service_pack.naming }}</a>
                                 <a>{{ item.quantity }} x </a>
                                 <a>${{ item.price }}</a>
                             </li>

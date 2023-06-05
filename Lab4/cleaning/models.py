@@ -38,8 +38,9 @@ class ServicePackInstance(models.Model):
     """Specific Service pack which can or cannot be purchased."""
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, help_text="Unique ID for particular Service Pack")
     service_pack = models.ForeignKey('ServicePack', on_delete=models.RESTRICT, null=True)
-    price = models.IntegerField(default=0)
+    price = models.DecimalField(max_digits=10, decimal_places=2, default='0.00')
     date_created = models.DateField(null=True, blank=True)
+    purchase_count = models.PositiveIntegerField(default=0)
 
     #order = models.ForeignKey(Order, on_delete=models.SET_NULL, null=True)
 
@@ -62,5 +63,8 @@ class ServicePackInstance(models.Model):
 
     def __str__(self):
         return f'{self.id} ({self.service_pack.naming})'
+
+    def get_absolute_url(self):
+        return reverse('servicepack-detail', args=[str(self.id)])
 
 

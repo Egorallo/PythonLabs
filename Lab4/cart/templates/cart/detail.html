@@ -47,20 +47,20 @@
         </thead>
         <tbody>
         {% for item in cart %}
-            {% with servicepack=item.servicepack %}
+            {% with servicepackinstance=item.servicepackinstance %}
                 <tr>
-                    <td><a href="{{ servicepack.get_absolute_url }}">{{ servicepack.naming }}</a></td>
+                    <td><a >{{ servicepackinstance.service_pack.naming}}</a></td>
                     <td>{{ item.quantity }}</td>
-                    <td><a href="{% url 'cart:cart_remove' servicepack.id %}">Remove</a></td>
-                    <td class="num">{{ item.price }}</td>
-                    <td class="num">{{ item.total_price }}</td>
+                    <td><a href="{% url 'cart:cart_remove' servicepackinstance.id %}">Remove</a></td>
+                    <td class="num">${{ item.price }}</td>
+                    <td class="num">${{ item.total_price }}</td>
                 </tr>
             {% endwith %}
         {% endfor %}
         <tr class="total ">
             <td>Total</td>
             <td colspan="3"></td>
-            <td class="num">{{ cart.get_total_price }}</td>
+            <td class="num">${{ cart.get_total_price }}</td>
         </tr>
         </tbody>
     </table>

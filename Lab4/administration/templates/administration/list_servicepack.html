@@ -13,7 +13,7 @@
             {% for servicepack in servicepacks %}
                 <li>
                     <a href="{{ servicepack.get_absolute_url }}">{{ servicepack.naming }}</a>
-                    ({{ servicepack.price }})
+
                 </li>
                 <form action="{% url 'administration:edit_servicepack' servicepack.id %}" method="post">
                     {{ cart_servicepack_form }}
