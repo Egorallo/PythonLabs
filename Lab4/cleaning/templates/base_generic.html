@@ -16,49 +16,85 @@
     <!-- Add additional CSS in static file -->
     {% load static %}
     <link rel="stylesheet" href="{% static 'css/styles.css' %}"/>
+    <style>
+        /* Custom CSS for horizontal layout */
+        .sidebar-nav {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: flex-start;
+            list-style: none;
+            padding: 0;
+        }
+
+        .sidebar-nav li {
+            margin-right: 10px;
+        }
+
+        .sidebar-nav a {
+            text-decoration: none;
+        }
+
+        .login-button {
+            display: inline-block;
+            padding: 5px 17px;
+
+            background-color: #eaeaea;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: bold;
+            text-decoration: none;
+            color: #333;
+            transition: background-color 0.3s ease;
+        }
+
+        .login-button:hover {
+            background-color: #d4d4d4;
+
+        }
+    </style>
 </head>
 <body>
 <div class="container-fluid">
     <div class="row">
-        <div class="col-sm-2">
+        <div class="col-sm-12">
             {% block sidebar %}
                 <ul class="sidebar-nav">
                     <li>Timezone: <strong style="font-weight: bold;" id="user-timezone"></strong></li>
                     <li>Date: <strong style="font-weight: bold;" id="current-date"></strong></li>
                     <li>Current Time: <strong style="font-weight: bold;" id="current-time"></strong></li>
-                    <li><a href="{% url 'index' %}">Home</a></li>
+                    <li><a class="login-button" href="{% url 'index' %}">Home</a></li>
 
                     {% for group in user.groups.all %}
                         {% if group.name == 'Customer' %}
-                            <li><a href="{% url 'servicepacks' %}">All service packs</a></li>
-                            <li><a href="{% url 'cart:cart_detail' %}">Cart</a></li>
+                            <li><a class="login-button" href="{% url 'servicepacks' %}">All service packs</a></li>
+                            <li><a class="login-button" href="{% url 'cart:cart_detail' %}">Cart</a></li>
                         {% endif %}
                     {% endfor %}
 
                     {% for group in user.groups.all %}
                         {% if group.name == 'Staff' %}
-                            <li><a href="{% url 'order:orders' %}">All orders</a></li>
+                            <li><a class="login-button" href="{% url 'order:orders' %}">All orders</a></li>
                         {% endif %}
                     {% endfor %}
 
                     {% for group in user.groups.all %}
                         {% if group.name == 'Admin' %}
-                            <li><a href="{% url 'servicepacks' %}">All service packs</a></li>
-                            <li><a href="{% url 'order:orders' %}">All orders</a></li>
-                            <li><a href="{% url 'administration:list_servicepack' %}">Edit stuff</a></li>
+                            <li><a class="login-button" href="{% url 'servicepacks' %}">All service packs</a></li>
+                            <li><a class="login-button" href="{% url 'order:orders' %}">All orders</a></li>
+                            <li><a class="login-button" href="{% url 'administration:list_servicepack' %}">Edit
+                                stuff</a></li>
                         {% endif %}
                     {% endfor %}
 
                     {% if user.is_authenticated %}
-                        <li>User: <strong style="font-weight: bold;">{{ user.get_username }}</strong></li>
-                        <li><a href="{% url 'logout' %}?next={{ '' }}">Logout</a></li>
-
+                        <li>User: <strong style="font-weight: bold">{{ user.get_username }}</strong></li>
+                        <li><a class="login-button" style="background-color:orangered" href="{% url 'logout' %}?next={{ '' }}">Logout</a></li>
                     {% else %}
-                        <li><a href="{% url 'servicepacks' %}">All service packs</a></li>
-                        <li><a href="{% url 'register' %}?next={{ '' }}">Register</a></li>
-                        <li><a href="{% url 'login' %}?next={{ '/cleaning' }}">Login</a></li>
+                        <li><a class="login-button" href="{% url 'servicepacks' %}">All service packs</a></li>
+                        <li><a class="login-button" href="{% url 'register' %}?next={{ '' }}">Register</a></li>
+                        <li><a class="login-button" href="{% url 'login' %}?next={{ '/cleaning' }}">Login</a></li>
                     {% endif %}
-
                 </ul>
             {% endblock %}
         </div>
@@ -74,7 +110,7 @@
         var hours = currentTime.getHours();
         var minutes = currentTime.getMinutes();
         var seconds = currentTime.getSeconds();
-        var month = currentTime.getMonth() + 1;  // Months are zero-based
+        var month = currentTime.getMonth() + 1; // Months are zero-based
         var day = currentTime.getDate();
         var year = currentTime.getFullYear();
 
@@ -92,17 +128,19 @@
     }
 
     // Get the user's timezone using pytz library and update the HTML element
-    fetch('https://worldtimeapi.org/api/ip')
-        .then(response => response.json())
-        .then(data => {
+    fetch("https://worldtimeapi.org/api/ip")
+        .then((response) => response.json())
+        .then((data) => {
             var userTimezone = data.timezone;
             document.getElementById("user-timezone").textContent = userTimezone;
         })
-        .catch(error => console.log(error));
+        .catch((error) => console.log(error));
 
     // Call the updateTime function to start updating the current time and date
     updateTime();
 </script>
 
+
 </body>
+
 </html>

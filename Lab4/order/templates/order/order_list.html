@@ -30,7 +30,7 @@
     {% if product_list %}
         <ul>
             {% for product in product_list %}
-                <li>{{ product.naming }}. Purchase amount: {{ product.purchase_count }} times</li>
+                <li>{{ product.naming }}</li>
             {% empty %}
                 <li>No products found.</li>
             {% endfor %}
@@ -49,9 +49,10 @@
                     <ul>
                         {% for item in order.items.all %}
                             <li>
-                                <a href="{{ item.servicepack.get_absolute_url }}">{{ item.servicepackinstance.service_pack.naming }}</a>
+                                <a href="{{ item.servicepackinstance.service_pack.get_absolute_url }}">{{ item.servicepackinstance.service_pack.naming }}</a>
                                 <a>{{ item.quantity }} x </a>
                                 <a>${{ item.price }}</a>
+
                             </li>
                         {% empty %}
                             <li>No service packs selected.</li>
