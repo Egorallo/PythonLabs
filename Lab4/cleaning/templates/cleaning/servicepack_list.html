@@ -1,0 +1,28 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+    <h1>Service Pack List</h1>
+
+    <div class="servicepack-row">
+        {% if servicepack_list %}
+            {% for servicepack in servicepack_list %}
+                <div class="servicepack-item">
+                    <a href="{{ servicepack.get_absolute_url }}">{{ servicepack.naming }}</a>
+                </div>
+            {% endfor %}
+        {% else %}
+            <p>There are no service packs.</p>
+        {% endif %}
+    </div>
+
+    <style>
+        .servicepack-row {
+            display: flex;
+            flex-wrap: wrap;
+        }
+
+        .servicepack-item {
+            margin-right: 10px;
+        }
+    </style>
+{% endblock %}

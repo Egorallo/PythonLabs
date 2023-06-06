@@ -1,0 +1,33 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+    <h1>Service Pack List</h1>
+    {% if servicepacks %}
+        <ul>
+            <form action="{% url 'administration:create_servicepack' %}" method="post">
+                {% csrf_token %}
+                <input type="submit" value="Create">
+            </form>
+
+            {% for servicepack in servicepacks %}
+                <li>
+                    <a href="{{ servicepack.get_absolute_url }}">{{ servicepack.naming }}</a>
+
+                </li>
+                <form action="{% url 'administration:edit_servicepack' servicepack.id %}" method="post">
+                    {{ cart_servicepack_form }}
+                    {% csrf_token %}
+                    <input type="submit" value="Edit">
+                </form>
+                <form action="{% url 'administration:delete_servicepack' servicepack.id %}" method="post">
+                    {{ cart_servicepack_form }}
+                    {% csrf_token %}
+                    <input type="submit" value="Delete">
+                </form>
+            {% endfor %}
+
+        </ul>
+    {% else %}
+        <p>There are no service packs.</p>
+    {% endif %}
+{% endblock %}

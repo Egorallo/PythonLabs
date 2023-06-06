@@ -1,0 +1,32 @@
+{% extends "base_generic.html" %}
+{% load static %}
+<link rel="stylesheet" href="{% static 'css/styles.css' %}"/>
+{% block content %}
+    <h1>Cleaning company Home</h1>
+    <p>
+        Welcome to Cleaning company
+    </p>
+    <h2>Packs:</h2>
+
+    <ul>
+        <li><strong>Service Packs:</strong> {{ num_service_packs }}</li>
+        <li><strong>All offered service packs</strong> {{ num_instances }}</li>
+        <li><strong>Available service packs for particular dates:</strong> {{ num_instances_available }}</li>
+    </ul>
+    <h2>Kanye West Quote:</h2>
+    <p>{{ quote }}</p>
+
+    <h2>Age Lookup</h2>
+    <form method="post" action="">
+        {% csrf_token %}
+        <label for="name">Enter Name:</label>
+        <input type="text" name="name" id="name" required>
+        <button type="submit">Get Age</button>
+    </form>
+
+    {% if age %}
+        <h2>Age:</h2>
+        <p>Name: {{ name }}</p>
+        <p>Age: {{ age }}</p>
+    {% endif %}
+{% endblock %}

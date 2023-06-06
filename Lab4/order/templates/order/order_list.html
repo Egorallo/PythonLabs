@@ -1,0 +1,70 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+    <h1>Order List</h1>
+
+    <h2>Statistics:</h2>
+    <p>
+        <strong>Total Sales:</strong> ${{ total_sales }}
+        <strong>Mean:</strong> ${{ sales_mean }}
+        <strong>Mode:</strong> ${{ sales_mode }}
+        <strong>Median:</strong> ${{ sales_median }}
+        <strong>Most popular pack:</strong> {{ popular_item }}
+        <strong>Most profitable pack:</strong> {{ item_with_most_profit }}
+    </p>
+
+    <h2>Client List:</h2>
+    {% if client_list %}
+        <ul>
+            {% for client in client_list %}
+                <li>{{ client }}</li>
+            {% empty %}
+                <li>No clients found.</li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>There are no clients.</p>
+    {% endif %}
+
+    <h2>Product List:</h2>
+    {% if product_list %}
+        <ul>
+            {% for product in product_list %}
+                <li>{{ product.naming }}</li>
+            {% empty %}
+                <li>No products found.</li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>There are no products.</p>
+    {% endif %}
+
+    <h2>Order Details:</h2>
+    {% if order_list %}
+        <ul>
+            {% for order in order_list %}
+                <li>
+                    <a href="{% url 'order:order-detail' order.id %}">Order: {{ order.id }}</a> - Client: {{ order.client }}
+
+                    <ul>
+                        {% for item in order.items.all %}
+                            <li>
+                                <a href="{{ item.servicepackinstance.service_pack.get_absolute_url }}">{{ item.servicepackinstance.service_pack.naming }}</a>
+                                <a>{{ item.quantity }} x </a>
+                                <a>${{ item.price }}</a>
+
+                            </li>
+                        {% empty %}
+                            <li>No service packs selected.</li>
+                        {% endfor %}
+                    </ul>
+                    <a style="font-weight: bold">Total: ${{ order.get_total_cost }} </a>
+                </li>
+            {% empty %}
+                <li>No orders found.</li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>There are no orders.</p>
+    {% endif %}
+{% endblock %}

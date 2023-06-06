@@ -1,0 +1,45 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+    <h1>Naming: {{ servicepack.naming }}</h1>
+
+    <p><strong>Provided services:</strong> {{ servicepack.service.all|join:", " }}</p>
+
+    <form method="GET">
+        <label for="price-filter">Filter by price:</label>
+        <label>
+            <input type="number" name="price" value="{{ price_filter }}" placeholder="Enter price filter"
+                   pattern="[0-9]+">
+        </label>
+        <button type="submit">Apply</button>
+    </form>
+
+    <div style="margin-left:20px;margin-top:20px">
+        <h4>Available Packs</h4>
+
+        {% for copy in filtered_copies %}
+            <hr/>
+            <p class="{% if copy.status == 'a' %}text-success{% elif copy.status == 'o' %}text-danger{% else %}text-warning{% endif %}">
+                {{ copy.get_status_display }}
+            </p>
+            {% if copy.status != 'a' %}
+                <p><strong>Not available now</strong></p>
+            {% endif %}
+            <p><strong>Price:</strong> ${{ copy.price }}</p>
+            <p><strong>Date can be booked on:</strong> {{ copy.date_created }}</p>
+            <p class="text-muted"><strong>Id:</strong> {{ copy.id }}</p>
+
+            {% if user.is_authenticated and copy.status == 'a' %}
+                {% for group in user.groups.all %}
+                    {% if group.name == 'Customer' %}
+                        <form action="{% url 'cart:cart_add' copy.id %}" method="post">
+                            {{ cart_servicepack_form }}
+                            {% csrf_token %}
+                            <input type="submit" value="Add to cart">
+                        </form>
+                    {% endif %}
+                {% endfor %}
+            {% endif %}
+        {% endfor %}
+    </div>
+{% endblock %}

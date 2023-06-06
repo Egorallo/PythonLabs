@@ -1,0 +1,72 @@
+{% extends "base_generic.html" %}
+{% load static %}
+
+{% block title %}
+    Your shopping cart
+{% endblock %}
+
+{% block content %}
+    <style>
+        .cart td, .cart th {
+            margin: 20px;
+        }
+
+        .cart {
+            width: 40%;
+            text-align: center;
+        }
+
+        .cart th {
+            text-align: center;
+        }
+
+        .cart td {
+            text-align: center;
+            vertical-align: middle;
+        }
+
+        .cart .total {
+            margin-top: 20px;
+            border-top: 2px solid black;
+            font-weight: bold;
+            text-align: right;
+            position: relative;
+        }
+    </style>
+
+    <h1>Your shopping cart</h1>
+    <table class="cart">
+        <thead>
+        <tr>
+            <th>Service Pack</th>
+            <th>Quantity</th>
+            <th>Remove</th>
+            <th>Unit price</th>
+            <th>Price</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for item in cart %}
+            {% with servicepackinstance=item.servicepackinstance %}
+                <tr>
+                    <td><a>{{ servicepackinstance.service_pack.naming }}</a></td>
+                    <td>{{ item.quantity }}</td>
+                    <td><a href="{% url 'cart:cart_remove' servicepackinstance.id %}">Remove</a></td>
+                    <td class="num">${{ item.price }}</td>
+                    <td class="num">${{ item.total_price }}</td>
+                </tr>
+            {% endwith %}
+        {% endfor %}
+        <tr class="total ">
+            <td>Total</td>
+            <td colspan="3"></td>
+            <td class="num">${{ cart.get_total_price }}</td>
+        </tr>
+        </tbody>
+    </table>
+    <div class="checkout" style="margin-top: 10px; text-align: left;">
+        <a href="{% url 'order:order_create' %}" class="button">
+            Checkout
+        </a>
+    </div>
+{% endblock %}
