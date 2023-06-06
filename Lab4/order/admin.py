@@ -5,6 +5,7 @@ from .models import Order, OrderItem
 class OrderItemInline(admin.TabularInline):
     model = OrderItem
     raw_id_fields = ['servicepackinstance']
+    extra = 0
 
 
 class OrderAdmin(admin.ModelAdmin):

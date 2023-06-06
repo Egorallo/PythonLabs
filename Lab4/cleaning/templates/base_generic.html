@@ -13,11 +13,9 @@
             rel="stylesheet"
             integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3"
             crossorigin="anonymous"/>
-    <!-- Add additional CSS in static file -->
     {% load static %}
     <link rel="stylesheet" href="{% static 'css/styles.css' %}"/>
     <style>
-        /* Custom CSS for horizontal layout */
         .sidebar-nav {
             display: flex;
             flex-wrap: wrap;
@@ -50,7 +48,6 @@
 
         .login-button:hover {
             background-color: #d4d4d4;
-
         }
     </style>
 </head>
@@ -89,7 +86,8 @@
 
                     {% if user.is_authenticated %}
                         <li>User: <strong style="font-weight: bold">{{ user.get_username }}</strong></li>
-                        <li><a class="login-button" style="background-color:orangered" href="{% url 'logout' %}?next={{ '' }}">Logout</a></li>
+                        <li><a class="login-button" style="background-color:orangered"
+                               href="{% url 'logout' %}?next={{ '' }}">Logout</a></li>
                     {% else %}
                         <li><a class="login-button" href="{% url 'servicepacks' %}">All service packs</a></li>
                         <li><a class="login-button" href="{% url 'register' %}?next={{ '' }}">Register</a></li>
@@ -103,14 +101,13 @@
     </div>
 </div>
 
-<!-- Add JavaScript code to update the current time and date every second -->
 <script>
     function updateTime() {
         var currentTime = new Date();
         var hours = currentTime.getHours();
         var minutes = currentTime.getMinutes();
         var seconds = currentTime.getSeconds();
-        var month = currentTime.getMonth() + 1; // Months are zero-based
+        var month = currentTime.getMonth() + 1;
         var day = currentTime.getDate();
         var year = currentTime.getFullYear();
 

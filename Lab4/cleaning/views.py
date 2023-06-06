@@ -1,9 +1,7 @@
 import requests
 from django.contrib.auth import login
-from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import Group
 from django.shortcuts import render, redirect, get_object_or_404
-
 from .forms import ExtendedUserCreationForm
 from .models import ServicePack, ServicePackInstance, Service
 from django.views import generic
@@ -14,10 +12,7 @@ CUSTOMER_ROLE = 'Customer'
 STAFF_ROLE = 'Staff'
 ADMIN_ROLE = 'Admin'
 
-
-
 # Create your views here.
-
 
 def register(request):
     if request.method == 'POST':
@@ -89,27 +84,13 @@ def index(request):
 
 class ServicePackListView(generic.ListView):
     model = ServicePack
-    template_name = 'cleaning/servicepack_list.html'  # Update with your template path
-
-    # def get_queryset(self):
-    #     queryset = super().get_queryset()
-    #     price_filter = self.request.GET.get('price')
-    #
-    #     if price_filter:
-    #         queryset = queryset.filter(price__lt=price_filter)
-    #
-    #     return queryset
-    #
-    # def get_context_data(self, **kwargs):
-    #     context = super().get_context_data(**kwargs)
-    #     context['price_filter'] = self.request.GET.get('price')
-    #     return context
+    template_name = 'cleaning/servicepack_list.html'
 
 
 
 class ServicePackDetailView(generic.DetailView):
     model = ServicePack
-    template_name = 'cleaning/servicepack_detail.html'  # Update with your template path
+    template_name = 'cleaning/servicepack_detail.html'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)

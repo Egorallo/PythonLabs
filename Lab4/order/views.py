@@ -1,19 +1,14 @@
-import io
-from django.contrib.auth.decorators import login_required
-from django.db.models import Sum, Count
-from django.http import HttpResponse
 from django.shortcuts import render, redirect
-from django.views import generic, View
-import matplotlib.pyplot as plt
-
+from django.views import generic
 from cleaning.models import ServicePack
 from .models import OrderItem
 from cart.cart import Cart
-# from cleaning.models import Client
 from .models import Order
 from django.core.exceptions import PermissionDenied
+from statistics import mean, mode, median
+from collections import Counter
 
-from django.shortcuts import get_object_or_404
+
 
 
 def order_create(request):
@@ -23,7 +18,7 @@ def order_create(request):
     cart = Cart(request)
 
     if cart.get_total_price() == 0:
-        return redirect('http://127.0.0.1:8000/cleaning/')
+        return redirect('cart:cart_detail')
 
     if request.method == 'POST':
         order = Order.objects.create(client=request.user.username)
@@ -36,7 +31,7 @@ def order_create(request):
                 quantity=item['quantity']
             )
             servicepackinstance.purchase_count += item['quantity']
-            servicepackinstance.status = 'o'  # Mark the service pack instance as ordered
+            servicepackinstance.status = 'o'
             servicepackinstance.save()
 
         cart.clear()
@@ -44,11 +39,6 @@ def order_create(request):
         return render(request, 'order/created.html', {'order': order})
 
     return render(request, 'order/create.html', {'cart': cart})
-
-
-from statistics import mean, mode, median
-
-from collections import Counter
 
 
 class OrderListView(generic.ListView):

@@ -17,8 +17,6 @@ class ServicePack(models.Model):
     """Model for Service Pack."""
     naming = models.CharField(max_length=200, help_text="Enter the service pack naming")
     service = models.ManyToManyField(Service, help_text='Select a service for this service pack')
-    #order = models.ManyToManyField(Order, blank=True)
-    #price = models.DecimalField(max_digits=10, decimal_places=2)
     purchase_count = models.PositiveIntegerField(default=0)
 
     def __str__(self):
@@ -33,16 +31,13 @@ class ServicePack(models.Model):
     display_service.short_description = 'Service'
 
 
-
 class ServicePackInstance(models.Model):
     """Specific Service pack which can or cannot be purchased."""
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, help_text="Unique ID for particular Service Pack")
-    service_pack = models.ForeignKey('ServicePack', on_delete=models.RESTRICT, null=True)
+    service_pack = models.ForeignKey('ServicePack', on_delete=models.SET_NULL, null=True)
     price = models.DecimalField(max_digits=10, decimal_places=2, default='0.00')
     date_created = models.DateField(null=True, blank=True)
     purchase_count = models.PositiveIntegerField(default=0)
-
-    #order = models.ForeignKey(Order, on_delete=models.SET_NULL, null=True)
 
     AVAILABLE_STATUS = (
         ('a', 'Available'),
@@ -63,8 +58,3 @@ class ServicePackInstance(models.Model):
 
     def __str__(self):
         return f'{self.id} '
-
-    def get_absolute_url(self):
-        return reverse('servicepack-detail', args=[str(self.id)])
-
-
